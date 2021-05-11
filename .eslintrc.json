@@ -1,0 +1,8 @@
+{
+  "extends": "standard-with-typescript",
+  "ignorePatterns": "dist",
+  "root": true,
+  "parserOptions": {
+    "project": "./tsconfig.json"
+  }
+}
