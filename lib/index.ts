@@ -41,9 +41,27 @@ handleAsync(async () => {
     console.log('Projects with existing package.json not supported yet.')
     return
   }
+  const { willBePublished } = await prompt.get([{
+    properties: {
+      willBePublished: {
+        description: 'Will this package be published?',
+        type: 'boolean',
+        default: true
+      }
+    }
+  }])
+  const { name } = await prompt.get([{
+    properties: {
+      name: {
+        description: 'Name of package',
+        pattern: packageNameRegex,
+        required: true
+      }
+    }
+  }])
   console.log('Creating package.json')
-  const answer = await prompt.get([{ properties: { name: { name: 'Name of package', pattern: packageNameRegex } } }])
   await writeFile('package.json', {
-    ...answer
+    private: !(willBePublished as boolean) || undefined,
+    name
   }, { spaces: 2 })
 })
