@@ -12,6 +12,9 @@
   },
   "bin": "dist/index.js",
   "devDependencies": {
+    "@types/jsonfile": "^6.0.0",
+    "@types/node": "^15.0.2",
+    "@types/parse-git-config": "^3.0.0",
     "@typescript-eslint/eslint-plugin": "^4.23.0",
     "eslint": "^7.26.0",
     "eslint-config-standard-with-typescript": "^20.0.0",
@@ -25,5 +28,11 @@
     "start": "node dist/index",
     "build": "tsc",
     "prepublishOnly": "npm run build"
+  },
+  "dependencies": {
+    "@calipsa/wrap-error": "^0.1.6",
+    "find-git-root": "^1.0.4",
+    "jsonfile": "^6.1.0",
+    "parse-git-config": "^3.0.0"
   }
 }
