@@ -5,8 +5,13 @@ import findGitRoot from 'find-git-root'
 import { access } from 'fs/promises'
 import wrapError from '@calipsa/wrap-error'
 import { writeFile } from 'jsonfile'
+import prompt from 'prompt'
+import packageNameRegex from 'package-name-regex'
 
 handleAsync(async () => {
+  // Start prompt right away
+  prompt.start()
+
   const cwd = process.cwd()
   let gitConfigPath: string | undefined
   try {
@@ -37,5 +42,8 @@ handleAsync(async () => {
     return
   }
   console.log('Creating package.json')
-  await writeFile('package.json', {})
+  const answer = await prompt.get([{ properties: { name: { name: 'Name of package', pattern: packageNameRegex } } }])
+  await writeFile('package.json', {
+    ...answer
+  }, { spaces: 2 })
 })
