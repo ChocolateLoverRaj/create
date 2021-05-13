@@ -2,16 +2,35 @@
 import handleAsync from './handleAsync'
 import parseGitConfig, { Config } from 'parse-git-config'
 import findGitRoot from 'find-git-root'
-import { access } from 'fs/promises'
+import { access, readFile } from 'fs/promises'
 import wrapError from '@calipsa/wrap-error'
 import { writeFile } from 'jsonfile'
 import prompt from 'prompt'
 import packageNameRegex from 'package-name-regex'
+import findConfig from 'find-config'
+import findLicense from './findLicense'
+import nullishAnd, { WithUndefined } from './nullishAnd'
 
 handleAsync(async () => {
   // Start prompt right away
   prompt.start()
 
+  // Check if package.json exists
+  let packageJsonExists: boolean
+  try {
+    await access('package.json')
+    packageJsonExists = true
+  } catch (e) {
+    if (e.code === 'ENOENT') {
+      packageJsonExists = false
+    } else throw wrapError(e, 'Error checking if package.json exists')
+  }
+  if (packageJsonExists) {
+    console.log('Projects with existing package.json not supported yet.')
+    return
+  }
+
+  // Find git remote
   const cwd = process.cwd()
   let gitConfigPath: string | undefined
   try {
@@ -28,19 +47,15 @@ handleAsync(async () => {
     gitRemoteUrl = config?.['remote "origin"'].url
   }
   if (gitRemoteUrl !== undefined) console.log(`Detected git remote: ${gitRemoteUrl}`)
-  let packageJsonExists: boolean
-  try {
-    await access('package.json')
-    packageJsonExists = true
-  } catch (e) {
-    if (e.code === 'ENOENT') {
-      packageJsonExists = false
-    } else throw wrapError(e, 'Error checking if package.json exists')
-  }
-  if (packageJsonExists) {
-    console.log('Projects with existing package.json not supported yet.')
-    return
-  }
+
+  // Find license
+  const licensePath = findConfig('LICENSE')
+  const licenseContent = await nullishAnd(readFile, licensePath, 'utf8') as WithUndefined<string>
+  const licenseName = nullishAnd(findLicense, licenseContent)
+  nullishAnd((licenseName: string) => {
+    console.log(`Detected license: ${licenseName}`)
+  }, licenseName)
+
   const { willBePublished } = await prompt.get([{
     properties: {
       willBePublished: {
@@ -62,6 +77,7 @@ handleAsync(async () => {
   console.log('Creating package.json')
   await writeFile('package.json', {
     private: !(willBePublished as boolean) || undefined,
-    name
+    name,
+    license: licenseName
   }, { spaces: 2 })
 })

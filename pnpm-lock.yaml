@@ -2,8 +2,10 @@ lockfileVersion: 5.3
 
 specifiers:
   '@calipsa/wrap-error': ^0.1.6
+  '@types/find-config': ^1.0.0
   '@types/jsonfile': ^6.0.0
   '@types/node': ^15.0.2
+  '@types/package-name-regex': ^2.0.0
   '@types/parse-git-config': ^3.0.0
   '@types/prompt': ^1.1.0
   '@typescript-eslint/eslint-plugin': ^4.23.0
@@ -12,6 +14,7 @@ specifiers:
   eslint-plugin-import: ^2.22.1
   eslint-plugin-node: ^11.1.0
   eslint-plugin-promise: ^4.3.1
+  find-config: ^1.0.0
   find-git-root: ^1.0.4
   jsonfile: ^6.1.0
   package-name-regex: ^2.0.0
@@ -21,6 +24,7 @@ specifiers:
 
 dependencies:
   '@calipsa/wrap-error': 0.1.6
+  find-config: 1.0.0
   find-git-root: 1.0.4
   jsonfile: 6.1.0
   package-name-regex: 2.0.0
@@ -28,8 +32,10 @@ dependencies:
   prompt: 1.1.0
 
 devDependencies:
+  '@types/find-config': 1.0.0
   '@types/jsonfile': 6.0.0
   '@types/node': 15.0.2
+  '@types/package-name-regex': 2.0.0
   '@types/parse-git-config': 3.0.0
   '@types/prompt': 1.1.0
   '@typescript-eslint/eslint-plugin': 4.23.0_eslint@7.26.0+typescript@4.2.4
@@ -102,6 +108,10 @@ packages:
       fastq: 1.11.0
     dev: true
 
+  /@types/find-config/1.0.0:
+    resolution: {integrity: sha512-wyNkArpclTc8XHMiAApJ3z3Ix3ERq8Qh6TrTcwIwAEwN4AgNbdhmf2jb+yIncsQwKjIV9S5qAkaiYxne7JpqKQ==}
+    dev: true
+
   /@types/json-schema/7.0.7:
     resolution: {integrity: sha512-cxWFQVseBm6O9Gbw1IWb8r6OS4OhSt3hPZLkFApLjM8TEXROBuQGLAH2i2gZpcXdLBIrpXuTDhH7Vbm1iXmNGA==}
     dev: true
@@ -118,6 +128,10 @@ packages:
 
   /@types/node/15.0.2:
     resolution: {integrity: sha512-p68+a+KoxpoB47015IeYZYRrdqMUcpbK8re/zpFB8Ld46LHC1lPEbp3EXgkEhAYEcPvjJF6ZO+869SQ0aH1dcA==}
+    dev: true
+
+  /@types/package-name-regex/2.0.0:
+    resolution: {integrity: sha512-DM0dpUWqqkjHhy0j/yyxW7H2AkN/hhqwThsnkTg8CnC2cAURuqusogheWRya7UEZ8ceVTsbiK9T/JeL5GklcxA==}
     dev: true
 
   /@types/parse-git-config/3.0.0:
@@ -814,6 +828,13 @@ packages:
       to-regex-range: 5.0.1
     dev: true
 
+  /find-config/1.0.0:
+    resolution: {integrity: sha1-6vorm8B/qckOmgw++c7PHMgA9TA=}
+    engines: {node: '>= 0.12'}
+    dependencies:
+      user-home: 2.0.0
+    dev: false
+
   /find-git-root/1.0.4:
     resolution: {integrity: sha512-468fmirKKgcrqfZfPn0xIpwZUUsZQcYXfx0RC2/jX39GPz83TwutQNZZhDrI6HqjO8cRejxQVaUY8GQdXopFfA==}
     dev: false
@@ -1261,6 +1282,11 @@ packages:
       word-wrap: 1.2.3
     dev: true
 
+  /os-homedir/1.0.2:
+    resolution: {integrity: sha1-/7xJiDNuDoM94MFox+8VISGqf7M=}
+    engines: {node: '>=0.10.0'}
+    dev: false
+
   /p-limit/1.3.0:
     resolution: {integrity: sha512-vvcXsLAJ9Dr5rQOPk7toZQZJApBl2K4J6dANSsEuh6QI41JYcsS/qhTGa9ErIUUgK3WNQoJYvylxvjqmiqEA9Q==}
     engines: {node: '>=4'}
@@ -1676,6 +1702,13 @@ packages:
     dependencies:
       punycode: 2.1.1
     dev: true
+
+  /user-home/2.0.0:
+    resolution: {integrity: sha1-nHC/2Babwdy/SGBODwS4tJzenp8=}
+    engines: {node: '>=0.10.0'}
+    dependencies:
+      os-homedir: 1.0.2
+    dev: false
 
   /utile/0.3.0:
     resolution: {integrity: sha1-E1LDQOuCDk2N26A5pPv6oy7U7zo=}

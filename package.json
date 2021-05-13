@@ -12,8 +12,10 @@
   },
   "bin": "dist/index.js",
   "devDependencies": {
+    "@types/find-config": "^1.0.0",
     "@types/jsonfile": "^6.0.0",
     "@types/node": "^15.0.2",
+    "@types/package-name-regex": "^2.0.0",
     "@types/parse-git-config": "^3.0.0",
     "@types/prompt": "^1.1.0",
     "@typescript-eslint/eslint-plugin": "^4.23.0",
@@ -32,6 +34,7 @@
   },
   "dependencies": {
     "@calipsa/wrap-error": "^0.1.6",
+    "find-config": "^1.0.0",
     "find-git-root": "^1.0.4",
     "jsonfile": "^6.1.0",
     "package-name-regex": "^2.0.0",

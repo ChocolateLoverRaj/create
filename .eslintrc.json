@@ -4,5 +4,11 @@
   "root": true,
   "parserOptions": {
     "project": "./tsconfig.json"
+  },
+  "rules": {
+    "max-len": [
+      "error",
+      100
+    ]
   }
 }
