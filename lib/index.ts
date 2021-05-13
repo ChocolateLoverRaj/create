@@ -80,6 +80,7 @@ handleAsync(async () => {
   await writeFile('package.json', {
     private: !(willBePublished as boolean) || undefined,
     name,
+    version: '1.0.0',
     license: licenseName,
     ...nullishAnd(
       (gitRemoteUrl: string) => {
