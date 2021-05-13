@@ -10,6 +10,8 @@ import packageNameRegex from 'package-name-regex'
 import findConfig from 'find-config'
 import findLicense from './findLicense'
 import nullishAnd, { WithUndefined } from './nullishAnd'
+import { dirname, relative } from 'path'
+import normalize from 'normalize-path'
 
 handleAsync(async () => {
   // Start prompt right away
@@ -78,6 +80,20 @@ handleAsync(async () => {
   await writeFile('package.json', {
     private: !(willBePublished as boolean) || undefined,
     name,
-    license: licenseName
+    license: licenseName,
+    ...nullishAnd(
+      (gitRemoteUrl: string) => {
+        const directory = normalize(relative(dirname(dirname(gitConfigPath as string)), cwd))
+        return {
+          homepage: `${gitRemoteUrl.slice(0, -4)}#readme`,
+          repository: {
+            type: 'git',
+            url: `git+${gitRemoteUrl}`,
+            directory: directory !== '' ? directory : undefined
+          }
+        }
+      },
+      gitRemoteUrl
+    )
   }, { spaces: 2 })
 })

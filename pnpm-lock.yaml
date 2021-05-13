@@ -5,6 +5,7 @@ specifiers:
   '@types/find-config': ^1.0.0
   '@types/jsonfile': ^6.0.0
   '@types/node': ^15.0.2
+  '@types/normalize-path': ^3.0.0
   '@types/package-name-regex': ^2.0.0
   '@types/parse-git-config': ^3.0.0
   '@types/prompt': ^1.1.0
@@ -17,6 +18,7 @@ specifiers:
   find-config: ^1.0.0
   find-git-root: ^1.0.4
   jsonfile: ^6.1.0
+  normalize-path: ^3.0.0
   package-name-regex: ^2.0.0
   parse-git-config: ^3.0.0
   prompt: ^1.1.0
@@ -27,6 +29,7 @@ dependencies:
   find-config: 1.0.0
   find-git-root: 1.0.4
   jsonfile: 6.1.0
+  normalize-path: 3.0.0
   package-name-regex: 2.0.0
   parse-git-config: 3.0.0
   prompt: 1.1.0
@@ -35,6 +38,7 @@ devDependencies:
   '@types/find-config': 1.0.0
   '@types/jsonfile': 6.0.0
   '@types/node': 15.0.2
+  '@types/normalize-path': 3.0.0
   '@types/package-name-regex': 2.0.0
   '@types/parse-git-config': 3.0.0
   '@types/prompt': 1.1.0
@@ -128,6 +132,10 @@ packages:
 
   /@types/node/15.0.2:
     resolution: {integrity: sha512-p68+a+KoxpoB47015IeYZYRrdqMUcpbK8re/zpFB8Ld46LHC1lPEbp3EXgkEhAYEcPvjJF6ZO+869SQ0aH1dcA==}
+    dev: true
+
+  /@types/normalize-path/3.0.0:
+    resolution: {integrity: sha512-Nd8y/5t/7CRakPYiyPzr/IAfYusy1FkcZYFEAcoMZkwpJv2n4Wm+olW+e7xBdHEXhOnWdG9ddbar0gqZWS4x5Q==}
     dev: true
 
   /@types/package-name-regex/2.0.0:
@@ -1235,6 +1243,11 @@ packages:
       semver: 5.7.1
       validate-npm-package-license: 3.0.4
     dev: true
+
+  /normalize-path/3.0.0:
+    resolution: {integrity: sha512-6eZs5Ls3WtCisHWp9S2GUy8dqkpGi4BVSz3GaqiE6ezub0512ESztXUwUB6C6IKbQkY2Pnb/mD4WYojCRwcwLA==}
+    engines: {node: '>=0.10.0'}
+    dev: false
 
   /object-inspect/1.10.3:
     resolution: {integrity: sha512-e5mCJlSH7poANfC8z8S9s9S2IN5/4Zb3aZ33f5s8YqoazCFzNLloLU8r5VCG+G7WoqLvAAZoVMcy3tp/3X0Plw==}
