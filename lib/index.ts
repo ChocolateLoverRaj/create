@@ -2,35 +2,35 @@
 import handleAsync from './handleAsync'
 import parseGitConfig, { Config } from 'parse-git-config'
 import findGitRoot from 'find-git-root'
-import { access, readFile } from 'fs/promises'
+import { writeFile, readFile } from 'fs/promises'
 import wrapError from '@calipsa/wrap-error'
-import { writeFile } from 'jsonfile'
+import { writeFile as writeJsonFile } from 'jsonfile'
 import prompt from 'prompt'
 import packageNameRegex from 'package-name-regex'
 import findConfig from 'find-config'
 import findLicense from './findLicense'
 import nullishAnd, { WithUndefined } from './nullishAnd'
-import { dirname, relative } from 'path'
+import { dirname, relative, join } from 'path'
 import normalize from 'normalize-path'
+import exists from 'path-exists'
+import promptReplaceReadme from './promptReplaceReadme'
+import pupa from 'pupa'
+
+const resPath = join(__dirname, '../res')
+const readmeTemplatePath = join(resPath, 'readmeTemplate.md')
 
 handleAsync(async () => {
   // Start prompt right away
   prompt.start()
 
   // Check if package.json exists
-  let packageJsonExists: boolean
-  try {
-    await access('package.json')
-    packageJsonExists = true
-  } catch (e) {
-    if (e.code === 'ENOENT') {
-      packageJsonExists = false
-    } else throw wrapError(e, 'Error checking if package.json exists')
-  }
+  const packageJsonExists = await exists('package.json')
   if (packageJsonExists) {
     console.log('Projects with existing package.json not supported yet.')
     return
   }
+
+  const readmeExistsPromise = exists('README.md')
 
   // Find git remote
   const cwd = process.cwd()
@@ -67,7 +67,7 @@ handleAsync(async () => {
       }
     }
   }])
-  const { name } = await prompt.get([{
+  const name = (await prompt.get([{
     properties: {
       name: {
         description: 'Name of package',
@@ -75,9 +75,9 @@ handleAsync(async () => {
         required: true
       }
     }
-  }])
-  console.log('Creating package.json')
-  await writeFile('package.json', {
+  }])).name as string
+
+  const promises: Array<Promise<unknown>> = [writeJsonFile('package.json', {
     private: !(willBePublished as boolean) || undefined,
     name,
     version: '1.0.0',
@@ -96,5 +96,14 @@ handleAsync(async () => {
       },
       gitRemoteUrl
     )
-  }, { spaces: 2 })
+  }, { spaces: 2 })]
+
+  if (!(await readmeExistsPromise) || await promptReplaceReadme()) {
+    promises.push(writeFile('README.md', pupa(
+      await readFile(readmeTemplatePath, 'utf8'),
+      { name }
+    )))
+  }
+
+  await Promise.all(promises)
 })
