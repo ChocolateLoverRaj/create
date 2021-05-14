@@ -10,6 +10,7 @@ specifiers:
   '@types/parse-git-config': ^3.0.0
   '@types/prompt': ^1.1.0
   '@typescript-eslint/eslint-plugin': ^4.23.0
+  commander: ^7.2.0
   eslint: ^7.26.0
   eslint-config-standard-with-typescript: ^20.0.0
   eslint-plugin-import: ^2.22.1
@@ -24,10 +25,12 @@ specifiers:
   path-exists: ^4.0.0
   prompt: ^1.1.0
   pupa: ^2.1.1
+  tslib: ^2.2.0
   typescript: ^4.2.4
 
 dependencies:
   '@calipsa/wrap-error': 0.1.6
+  commander: 7.2.0
   find-config: 1.0.0
   find-git-root: 1.0.4
   jsonfile: 6.1.0
@@ -37,6 +40,7 @@ dependencies:
   path-exists: 4.0.0
   prompt: 1.1.0
   pupa: 2.1.1
+  tslib: 2.2.0
 
 devDependencies:
   '@types/find-config': 1.0.0
@@ -440,6 +444,11 @@ packages:
   /colors/1.4.0:
     resolution: {integrity: sha512-a+UqTh4kgZg/SlGvfbzDHpgRu7AAQOmmqRHJnxhRZICKFUT91brVhNNt58CMWU9PsBbv3PDCZUHbVxuDiH2mtA==}
     engines: {node: '>=0.1.90'}
+    dev: false
+
+  /commander/7.2.0:
+    resolution: {integrity: sha512-QrWXB+ZQSVPmIWIhtEO9H+gwHaMGYiF5ChvoJ+K9ZGHG/sVsa6yiesAD1GC/x46sET00Xlwo1u49RVVVzvcSkw==}
+    engines: {node: '>= 10'}
     dev: false
 
   /concat-map/0.0.1:
@@ -1683,6 +1692,10 @@ packages:
   /tslib/1.14.1:
     resolution: {integrity: sha512-Xni35NKzjgMrwevysHTCArtLDpPvye8zV/0E4EyYn43P7/7qvQwPh9BGkHewbMulVntbigmcT7rdX3BNo9wRJg==}
     dev: true
+
+  /tslib/2.2.0:
+    resolution: {integrity: sha512-gS9GVHRU+RGn5KQM2rllAlR3dU6m7AcpJKdtH8gFvQiC4Otgk98XnmMU+nZenHt/+VhnBPWwgrJsyrdcw6i23w==}
+    dev: false
 
   /tsutils/3.21.0_typescript@4.2.4:
     resolution: {integrity: sha512-mHKK3iUXL+3UF6xL5k0PEhKRUBKPBCv/+RkEOpjRWxxx27KKRBmmA60A9pgOUvMi8GKhRMPEmjBRPzs2W7O1OA==}

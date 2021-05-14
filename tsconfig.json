@@ -5,6 +5,7 @@
     "outDir": "./dist",
     "esModuleInterop": true,
     "target": "ES2017",
-    "module": "CommonJS"
+    "module": "CommonJS",
+    "importHelpers": true
   }
 }

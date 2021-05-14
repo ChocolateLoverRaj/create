@@ -35,6 +35,7 @@
   },
   "dependencies": {
     "@calipsa/wrap-error": "^0.1.6",
+    "commander": "^7.2.0",
     "find-config": "^1.0.0",
     "find-git-root": "^1.0.4",
     "jsonfile": "^6.1.0",
@@ -43,6 +44,7 @@
     "parse-git-config": "^3.0.0",
     "path-exists": "^4.0.0",
     "prompt": "^1.1.0",
-    "pupa": "^2.1.1"
+    "pupa": "^2.1.1",
+    "tslib": "^2.2.0"
   }
 }
