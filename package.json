@@ -35,6 +35,7 @@
   },
   "dependencies": {
     "@calipsa/wrap-error": "^0.1.6",
+    "@octokit/rest": "^18.5.3",
     "commander": "^7.2.0",
     "find-config": "^1.0.0",
     "find-git-root": "^1.0.4",

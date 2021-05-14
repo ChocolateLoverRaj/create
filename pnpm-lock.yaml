@@ -2,6 +2,7 @@ lockfileVersion: 5.3
 
 specifiers:
   '@calipsa/wrap-error': ^0.1.6
+  '@octokit/rest': ^18.5.3
   '@types/find-config': ^1.0.0
   '@types/jsonfile': ^6.0.0
   '@types/node': ^15.0.2
@@ -30,6 +31,7 @@ specifiers:
 
 dependencies:
   '@calipsa/wrap-error': 0.1.6
+  '@octokit/rest': 18.5.3
   commander: 7.2.0
   find-config: 1.0.0
   find-git-root: 1.0.4
@@ -119,6 +121,105 @@ packages:
       '@nodelib/fs.scandir': 2.1.4
       fastq: 1.11.0
     dev: true
+
+  /@octokit/auth-token/2.4.5:
+    resolution: {integrity: sha512-BpGYsPgJt05M7/L/5FoE1PiAbdxXFZkX/3kDYcsvd1v6UhlnE5e96dTDr0ezX/EFwciQxf3cNV0loipsURU+WA==}
+    dependencies:
+      '@octokit/types': 6.14.2
+    dev: false
+
+  /@octokit/core/3.4.0:
+    resolution: {integrity: sha512-6/vlKPP8NF17cgYXqucdshWqmMZGXkuvtcrWCgU5NOI0Pl2GjlmZyWgBMrU8zJ3v2MJlM6++CiB45VKYmhiWWg==}
+    dependencies:
+      '@octokit/auth-token': 2.4.5
+      '@octokit/graphql': 4.6.1
+      '@octokit/request': 5.4.15
+      '@octokit/request-error': 2.0.5
+      '@octokit/types': 6.14.2
+      before-after-hook: 2.2.1
+      universal-user-agent: 6.0.0
+    dev: false
+
+  /@octokit/endpoint/6.0.11:
+    resolution: {integrity: sha512-fUIPpx+pZyoLW4GCs3yMnlj2LfoXTWDUVPTC4V3MUEKZm48W+XYpeWSZCv+vYF1ZABUm2CqnDVf1sFtIYrj7KQ==}
+    dependencies:
+      '@octokit/types': 6.14.2
+      is-plain-object: 5.0.0
+      universal-user-agent: 6.0.0
+    dev: false
+
+  /@octokit/graphql/4.6.1:
+    resolution: {integrity: sha512-2lYlvf4YTDgZCTXTW4+OX+9WTLFtEUc6hGm4qM1nlZjzxj+arizM4aHWzBVBCxY9glh7GIs0WEuiSgbVzv8cmA==}
+    dependencies:
+      '@octokit/request': 5.4.15
+      '@octokit/types': 6.14.2
+      universal-user-agent: 6.0.0
+    dev: false
+
+  /@octokit/openapi-types/7.0.0:
+    resolution: {integrity: sha512-gV/8DJhAL/04zjTI95a7FhQwS6jlEE0W/7xeYAzuArD0KVAVWDLP2f3vi98hs3HLTczxXdRK/mF0tRoQPpolEw==}
+    dev: false
+
+  /@octokit/plugin-paginate-rest/2.13.3_@octokit+core@3.4.0:
+    resolution: {integrity: sha512-46lptzM9lTeSmIBt/sVP/FLSTPGx6DCzAdSX3PfeJ3mTf4h9sGC26WpaQzMEq/Z44cOcmx8VsOhO+uEgE3cjYg==}
+    peerDependencies:
+      '@octokit/core': '>=2'
+    dependencies:
+      '@octokit/core': 3.4.0
+      '@octokit/types': 6.14.2
+    dev: false
+
+  /@octokit/plugin-request-log/1.0.3_@octokit+core@3.4.0:
+    resolution: {integrity: sha512-4RFU4li238jMJAzLgAwkBAw+4Loile5haQMQr+uhFq27BmyJXcXSKvoQKqh0agsZEiUlW6iSv3FAgvmGkur7OQ==}
+    peerDependencies:
+      '@octokit/core': '>=3'
+    dependencies:
+      '@octokit/core': 3.4.0
+    dev: false
+
+  /@octokit/plugin-rest-endpoint-methods/5.0.1_@octokit+core@3.4.0:
+    resolution: {integrity: sha512-vvWbPtPqLyIzJ7A4IPdTl+8IeuKAwMJ4LjvmqWOOdfSuqWQYZXq2CEd0hsnkidff2YfKlguzujHs/reBdAx8Sg==}
+    peerDependencies:
+      '@octokit/core': '>=3'
+    dependencies:
+      '@octokit/core': 3.4.0
+      '@octokit/types': 6.14.2
+      deprecation: 2.3.1
+    dev: false
+
+  /@octokit/request-error/2.0.5:
+    resolution: {integrity: sha512-T/2wcCFyM7SkXzNoyVNWjyVlUwBvW3igM3Btr/eKYiPmucXTtkxt2RBsf6gn3LTzaLSLTQtNmvg+dGsOxQrjZg==}
+    dependencies:
+      '@octokit/types': 6.14.2
+      deprecation: 2.3.1
+      once: 1.4.0
+    dev: false
+
+  /@octokit/request/5.4.15:
+    resolution: {integrity: sha512-6UnZfZzLwNhdLRreOtTkT9n57ZwulCve8q3IT/Z477vThu6snfdkBuhxnChpOKNGxcQ71ow561Qoa6uqLdPtag==}
+    dependencies:
+      '@octokit/endpoint': 6.0.11
+      '@octokit/request-error': 2.0.5
+      '@octokit/types': 6.14.2
+      is-plain-object: 5.0.0
+      node-fetch: 2.6.1
+      universal-user-agent: 6.0.0
+    dev: false
+
+  /@octokit/rest/18.5.3:
+    resolution: {integrity: sha512-KPAsUCr1DOdLVbZJgGNuE/QVLWEaVBpFQwDAz/2Cnya6uW2wJ/P5RVGk0itx7yyN1aGa8uXm2pri4umEqG1JBA==}
+    dependencies:
+      '@octokit/core': 3.4.0
+      '@octokit/plugin-paginate-rest': 2.13.3_@octokit+core@3.4.0
+      '@octokit/plugin-request-log': 1.0.3_@octokit+core@3.4.0
+      '@octokit/plugin-rest-endpoint-methods': 5.0.1_@octokit+core@3.4.0
+    dev: false
+
+  /@octokit/types/6.14.2:
+    resolution: {integrity: sha512-wiQtW9ZSy4OvgQ09iQOdyXYNN60GqjCL/UdMsepDr1Gr0QzpW6irIKbH3REuAHXAhxkEk9/F2a3Gcs1P6kW5jA==}
+    dependencies:
+      '@octokit/openapi-types': 7.0.0
+    dev: false
 
   /@types/find-config/1.0.0:
     resolution: {integrity: sha512-wyNkArpclTc8XHMiAApJ3z3Ix3ERq8Qh6TrTcwIwAEwN4AgNbdhmf2jb+yIncsQwKjIV9S5qAkaiYxne7JpqKQ==}
@@ -373,6 +474,10 @@ packages:
   /balanced-match/1.0.2:
     resolution: {integrity: sha512-3oSeUO0TMV67hN1AmbXsK4yaqU7tjiHlbxRDZOpH0KW9+CeX4bRAaX0Anxt0tx2MrpRpWwQaPwIlISEJhYU5Pw==}
 
+  /before-after-hook/2.2.1:
+    resolution: {integrity: sha512-/6FKxSTWoJdbsLDF8tdIjaRiFXiE6UHsEHE3OPI/cwPURCVi1ukP0gmLn7XWEiFk5TcwQjjY5PWsU+j+tgXgmw==}
+    dev: false
+
   /brace-expansion/1.1.11:
     resolution: {integrity: sha512-iCuPHDFgrHX7H2vEI/5xpz07zSHB00TpugqhmYtVmMO6518mCuRMoOYFldEBl0g187ufozdaHgWKcYFb61qGiA==}
     dependencies:
@@ -505,6 +610,10 @@ packages:
     dependencies:
       object-keys: 1.1.1
     dev: true
+
+  /deprecation/2.3.1:
+    resolution: {integrity: sha512-xmHIy4F3scKVwMsQ4WnVaS8bHOx0DmVwRywosKhaILI0ywMDWPtBSku2HNxRvF7jtwDRsoEwYQSfbxj8b7RlJQ==}
+    dev: false
 
   /dir-glob/3.0.1:
     resolution: {integrity: sha512-WkrWp9GR4KXfKGYzOLmTuGVi1UWFfws377n9cc55/tb6DuqyF6pcQ5AbiHEshaDpY9v6oaSr2XCDidGmMwdzIA==}
@@ -1088,6 +1197,11 @@ packages:
     engines: {node: '>=0.12.0'}
     dev: true
 
+  /is-plain-object/5.0.0:
+    resolution: {integrity: sha512-VRSzKkbMm5jMDoKLbltAkFQ5Qr7VDiTFGXxYFXXowVj387GeGNOCsOH6Msy00SGZ3Fp84b1Naa1psqgcCIEP5Q==}
+    engines: {node: '>=0.10.0'}
+    dev: false
+
   /is-regex/1.1.3:
     resolution: {integrity: sha512-qSVXFz28HM7y+IWX6vLCsexdlvzT1PJNFSBuaQLQ5o0IEw8UDYW6/2+eCMVyIsbM8CNLX2a/QWmSpyxYEHY7CQ==}
     engines: {node: '>= 0.4'}
@@ -1251,6 +1365,11 @@ packages:
   /ncp/1.0.1:
     resolution: {integrity: sha1-0VNn5cuHQyuhF9K/gP30Wuz7QkY=}
     hasBin: true
+    dev: false
+
+  /node-fetch/2.6.1:
+    resolution: {integrity: sha512-V4aYg89jEoVRxRb2fJdAg8FHvI7cEyYdVAh94HH0UIK8oJxUfkjlDQN9RbMx+bEjP7+ggMiFRprSti032Oipxw==}
+    engines: {node: 4.x || >=6.0.0}
     dev: false
 
   /normalize-package-data/2.5.0:
@@ -1738,6 +1857,10 @@ packages:
       has-symbols: 1.0.2
       which-boxed-primitive: 1.0.2
     dev: true
+
+  /universal-user-agent/6.0.0:
+    resolution: {integrity: sha512-isyNax3wXoKaulPDZWHQqbmIx1k2tb9fb3GGDBRxCscfYV2Ch7WxPArBsFEG8s/safwXTT7H4QGhaIkTp9447w==}
+    dev: false
 
   /universalify/2.0.0:
     resolution: {integrity: sha512-hAZsKq7Yy11Zu1DE0OzWjw7nnLZmJZYTDZZyEFHZdUhV8FkH5MCfoU1XMaxXovpyW5nq5scPqq0ZDP9Zyl04oQ==}

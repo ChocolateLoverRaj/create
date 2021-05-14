@@ -2,17 +2,16 @@ import parseGitConfig, { Config } from 'parse-git-config'
 import findGitRoot from 'find-git-root'
 import { writeFile, readFile } from 'fs/promises'
 import wrapError from '@calipsa/wrap-error'
-import { writeFile as writeJsonFile } from 'jsonfile'
 import prompt from 'prompt'
 import packageNameRegex from 'package-name-regex'
 import findConfig from 'find-config'
 import findLicense from '../helpers/findLicense'
 import nullishAnd, { WithUndefined } from '../helpers/nullishAnd'
-import { dirname, relative, join } from 'path'
-import normalize from 'normalize-path'
+import { join } from 'path'
 import exists from 'path-exists'
 import promptReplaceReadme from '../helpers/promptReplaceReadme'
 import pupa from 'pupa'
+import createPackageJson from '../helpers/createPackageJson'
 
 const resPath = join(__dirname, '../../res')
 const readmeTemplatePath = join(resPath, 'readmeTemplate.md')
@@ -56,7 +55,7 @@ const create = async (): Promise<void> => {
     console.log(`Detected license: ${licenseName}`)
   }, licenseName)
 
-  const { willBePublished } = await prompt.get([{
+  const willBePublished = (await prompt.get([{
     properties: {
       willBePublished: {
         description: 'Will this package be published?',
@@ -64,7 +63,7 @@ const create = async (): Promise<void> => {
         default: true
       }
     }
-  }])
+  }])).willBePublished as boolean
   const name = (await prompt.get([{
     properties: {
       name: {
@@ -75,26 +74,13 @@ const create = async (): Promise<void> => {
     }
   }])).name as string
 
-  const promises: Array<Promise<unknown>> = [writeJsonFile('package.json', {
-    private: !(willBePublished as boolean) || undefined,
+  const promises: Array<Promise<unknown>> = [createPackageJson(
+    !willBePublished,
     name,
-    version: '1.0.0',
-    license: licenseName,
-    ...nullishAnd(
-      (gitRemoteUrl: string) => {
-        const directory = normalize(relative(dirname(dirname(gitConfigPath as string)), cwd))
-        return {
-          homepage: `${gitRemoteUrl.slice(0, -4)}#readme`,
-          repository: {
-            type: 'git',
-            url: `git+${gitRemoteUrl}`,
-            directory: directory !== '' ? directory : undefined
-          }
-        }
-      },
-      gitRemoteUrl
-    )
-  }, { spaces: 2 })]
+    licenseName,
+    gitConfigPath,
+    gitRemoteUrl
+  )]
 
   if (!(await readmeExistsPromise) || await promptReplaceReadme()) {
     promises.push(writeFile('README.md', pupa(
