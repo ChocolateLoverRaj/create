@@ -1,13 +1,10 @@
-import prompt from 'prompt'
+import prompts from 'prompts'
 
-const promptGithubWorkflow = async (): Promise<boolean> => (await prompt.get([{
-  properties: {
-    createGithubWorkflow: {
-      description: 'Would you like to create GitHub Actions workflow files to check code lint?',
-      type: 'boolean',
-      default: true
-    }
-  }
-}])).createGithubWorkflow as boolean
+const promptGithubWorkflow = async (): Promise<boolean> => (await prompts({
+  name: 'main',
+  message: 'Would you like to create GitHub Actions workflow files to check code lint?',
+  type: 'toggle',
+  initial: true
+})).main
 
 export default promptGithubWorkflow

@@ -18,7 +18,7 @@
     "@types/normalize-path": "^3.0.0",
     "@types/package-name-regex": "^2.0.0",
     "@types/parse-git-config": "^3.0.0",
-    "@types/prompt": "^1.1.0",
+    "@types/prompts": "^2.0.11",
     "@typescript-eslint/eslint-plugin": "^4.23.0",
     "eslint": "^7.26.0",
     "eslint-config-standard-with-typescript": "^20.0.0",
@@ -46,7 +46,7 @@
     "package-name-regex": "^2.0.0",
     "parse-git-config": "^3.0.0",
     "path-exists": "^4.0.0",
-    "prompt": "^1.1.0",
+    "prompts": "^2.4.1",
     "pupa": "^2.1.1",
     "tslib": "^2.2.0"
   }

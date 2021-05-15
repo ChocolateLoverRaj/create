@@ -1,13 +1,9 @@
-import prompt from 'prompt'
+import prompts from 'prompts'
 
-const promptReplaceFile = async (fileName: string): Promise<boolean> => ((await prompt.get([{
-  properties: {
-    cancel: {
-      description: `${fileName} already exists. Would you like to replace it?`,
-      type: 'boolean',
-      default: false
-    }
-  }
-}])).cancel) as boolean
+const promptReplaceFile = async (fileName: string): Promise<boolean> => (await prompts({
+  name: 'main',
+  message: `${fileName} already exists. Would you like to replace it?`,
+  type: 'confirm'
+})).main
 
 export default promptReplaceFile

@@ -2,8 +2,6 @@ import parseGitConfig, { Config } from 'parse-git-config'
 import findGitRoot from 'find-git-root'
 import { writeFile, readFile } from 'fs/promises'
 import wrapError from '@calipsa/wrap-error'
-import prompt from 'prompt'
-import packageNameRegex from 'package-name-regex'
 import findConfig from 'find-config'
 import findLicense from '../helpers/findLicense'
 import nullishAnd, { WithUndefined } from '../helpers/nullishAnd'
@@ -12,19 +10,18 @@ import exists from 'path-exists'
 import promptReplaceFile from '../helpers/promptReplaceFile'
 import pupa from 'pupa'
 import createPackageJson from '../helpers/createPackageJson'
-import codeLints, { CodeLint } from '../helpers/codeLints'
 import resPath from '../helpers/resPath'
 import createEslintConfig from '../helpers/createEslintConfig'
 import eslintConfigFile from '../helpers/eslintConfigFile'
 import promptGithubWorkflow from '../helpers/promptGithubWorkflow'
 import createLintWorkflow from '../helpers/createLintWorkflow'
+import promptBoolean from '../helpers/promptBoolean'
+import promptPackageName from '../helpers/promptPackageName'
+import promptCodeLint from '../helpers/promptCodeLint'
 
 const readmeTemplatePath = join(resPath, 'readmeTemplate.md')
 
 const create = async (): Promise<void> => {
-  // Start prompt right away
-  prompt.start()
-
   // Check if package.json exists
   const packageJsonExists = await exists('package.json')
   if (packageJsonExists) {
@@ -66,33 +63,9 @@ const create = async (): Promise<void> => {
   if (readmeExists) console.log('Detected README.md')
   const writeReadme = !readmeExists || await promptReplaceFile('README.md')
 
-  const willBePublished = (await prompt.get([{
-    properties: {
-      willBePublished: {
-        description: 'Will this package be published?',
-        type: 'boolean',
-        default: true
-      }
-    }
-  }])).willBePublished as boolean
-  const name = (await prompt.get([{
-    properties: {
-      name: {
-        description: 'Name of package',
-        pattern: packageNameRegex,
-        required: true
-      }
-    }
-  }])).name as string
-  const codeLint = (await prompt.get([{
-    properties: {
-      codeLint: {
-        description: 'What style code lint should be used?',
-        enum: codeLints as any,
-        default: 'standard'
-      }
-    }
-  }])).codeLint as CodeLint
+  const willBePublished = await promptBoolean('Will this package be published?', true)
+  const name = await promptPackageName()
+  const codeLint = await promptCodeLint()
   const eslintConfigExists = await eslintConfigExistsPromise
   if (codeLint === 'standard' && eslintConfigExists)console.log('Detected .eslintrc.json')
   const writeEslintConfig = !eslintConfigExists || await promptReplaceFile(eslintConfigFile)
