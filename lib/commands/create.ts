@@ -1,16 +1,13 @@
 import parseGitConfig, { Config } from 'parse-git-config'
 import findGitRoot from 'find-git-root'
-import { writeFile, readFile } from 'fs/promises'
+import { readFile } from 'fs/promises'
 import wrapError from '@calipsa/wrap-error'
 import findConfig from 'find-config'
 import findLicense from '../helpers/findLicense'
 import nullishAnd, { WithUndefined } from '../helpers/nullishAnd'
-import { join } from 'path'
 import exists from 'path-exists'
 import promptReplaceFile from '../helpers/promptReplaceFile'
-import pupa from 'pupa'
 import createPackageJson from '../helpers/createPackageJson'
-import resPath from '../helpers/resPath'
 import createEslintConfig from '../helpers/createEslintConfig'
 import eslintConfigFile from '../helpers/eslintConfigFile'
 import promptGithubWorkflow from '../helpers/promptGithubWorkflow'
@@ -18,8 +15,7 @@ import createLintWorkflow from '../helpers/createLintWorkflow'
 import promptBoolean from '../helpers/promptBoolean'
 import promptPackageName from '../helpers/promptPackageName'
 import promptCodeLint from '../helpers/promptCodeLint'
-
-const readmeTemplatePath = join(resPath, 'readmeTemplate.md')
+import createReadme from '../helpers/createReadme'
 
 const create = async (): Promise<void> => {
   // Check if package.json exists
@@ -88,10 +84,7 @@ const create = async (): Promise<void> => {
       gitRemoteUrl,
       codeLint
     ),
-    writeReadme && writeFile('README.md', pupa(
-      await readFile(readmeTemplatePath, 'utf8'),
-      { name }
-    )),
+    writeReadme && createReadme(name, codeLint),
     writeEslintConfig && createEslintConfig(codeLint),
     createGithubLintWorkflow && createLintWorkflow()
   ])
