@@ -11,6 +11,7 @@ specifiers:
   '@types/parse-git-config': ^3.0.0
   '@types/prompt': ^1.1.0
   '@typescript-eslint/eslint-plugin': ^4.23.0
+  axios: ^0.21.1
   commander: ^7.2.0
   eslint: ^7.26.0
   eslint-config-standard-with-typescript: ^20.0.0
@@ -32,6 +33,7 @@ specifiers:
 dependencies:
   '@calipsa/wrap-error': 0.1.6
   '@octokit/rest': 18.5.3
+  axios: 0.21.1
   commander: 7.2.0
   find-config: 1.0.0
   find-git-root: 1.0.4
@@ -469,6 +471,14 @@ packages:
 
   /async/1.0.0:
     resolution: {integrity: sha1-+PwEyjoTeErenhZBr5hXjPvWR6k=}
+    dev: false
+
+  /axios/0.21.1:
+    resolution: {integrity: sha512-dKQiRHxGD9PPRIUNIWvZhPTPpl1rf/OxTYKsqKUDjBwYylTvV7SjSHJb9ratfyzM6wCdLCOYLzs73qpg5c4iGA==}
+    dependencies:
+      follow-redirects: 1.14.1
+    transitivePeerDependencies:
+      - debug
     dev: false
 
   /balanced-match/1.0.2:
@@ -992,6 +1002,16 @@ packages:
   /flatted/3.1.1:
     resolution: {integrity: sha512-zAoAQiudy+r5SvnSw3KJy5os/oRJYHzrzja/tBDqrZtNhUw8bt6y8OBzMWcjWr+8liV8Eb6yOhw8WZ7VFZ5ZzA==}
     dev: true
+
+  /follow-redirects/1.14.1:
+    resolution: {integrity: sha512-HWqDgT7ZEkqRzBvc2s64vSZ/hfOceEol3ac/7tKwzuvEyWx3/4UegXh5oBOIotkGsObyk3xznnSRVADBgWSQVg==}
+    engines: {node: '>=4.0'}
+    peerDependencies:
+      debug: '*'
+    peerDependenciesMeta:
+      debug:
+        optional: true
+    dev: false
 
   /fs.realpath/1.0.0:
     resolution: {integrity: sha1-FQStJSMVjKpA20onh8sBQRmU6k8=}

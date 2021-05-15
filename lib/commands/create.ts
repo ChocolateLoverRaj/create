@@ -9,11 +9,14 @@ import findLicense from '../helpers/findLicense'
 import nullishAnd, { WithUndefined } from '../helpers/nullishAnd'
 import { join } from 'path'
 import exists from 'path-exists'
-import promptReplaceReadme from '../helpers/promptReplaceReadme'
+import promptReplaceFile from '../helpers/promptReplaceFile'
 import pupa from 'pupa'
 import createPackageJson from '../helpers/createPackageJson'
+import codeLints, { CodeLint } from '../helpers/codeLints'
+import resPath from '../helpers/resPath'
+import createEslintConfig from '../helpers/createEslintConfig'
+import eslintConfigFile from '../helpers/eslintConfigFile'
 
-const resPath = join(__dirname, '../../res')
 const readmeTemplatePath = join(resPath, 'readmeTemplate.md')
 
 const create = async (): Promise<void> => {
@@ -28,6 +31,7 @@ const create = async (): Promise<void> => {
   }
 
   const readmeExistsPromise = exists('README.md')
+  const eslintConfigExistsPromise = exists(eslintConfigFile)
 
   // Find git remote
   const cwd = process.cwd()
@@ -55,6 +59,11 @@ const create = async (): Promise<void> => {
     console.log(`Detected license: ${licenseName}`)
   }, licenseName)
 
+  // Find README.md
+  const readmeExists = await readmeExistsPromise
+  if (readmeExists) console.log('Detected README.md')
+  const writeReadme = !readmeExists || await promptReplaceFile('README.md')
+
   const willBePublished = (await prompt.get([{
     properties: {
       willBePublished: {
@@ -73,23 +82,34 @@ const create = async (): Promise<void> => {
       }
     }
   }])).name as string
+  const codeLint = (await prompt.get([{
+    properties: {
+      codeLint: {
+        description: 'What style code lint should be used?',
+        enum: codeLints as any,
+        default: 'standard'
+      }
+    }
+  }])).codeLint as CodeLint
+  const eslintConfigExists = await eslintConfigExistsPromise
+  if (codeLint === 'standard' && eslintConfigExists)console.log('Detected .eslintrc.json')
+  const writeEslintConfig = !eslintConfigExists || await promptReplaceFile(eslintConfigFile)
 
-  const promises: Array<Promise<unknown>> = [createPackageJson(
-    !willBePublished,
-    name,
-    licenseName,
-    gitConfigPath,
-    gitRemoteUrl
-  )]
-
-  if (!(await readmeExistsPromise) || await promptReplaceReadme()) {
-    promises.push(writeFile('README.md', pupa(
+  await Promise.all([
+    createPackageJson(
+      !willBePublished,
+      name,
+      licenseName,
+      gitConfigPath,
+      gitRemoteUrl,
+      codeLint
+    ),
+    writeReadme && writeFile('README.md', pupa(
       await readFile(readmeTemplatePath, 'utf8'),
       { name }
-    )))
-  }
-
-  await Promise.all(promises)
+    )),
+    writeEslintConfig && createEslintConfig(codeLint)
+  ])
 }
 
 export default create
