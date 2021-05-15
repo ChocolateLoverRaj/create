@@ -1,6 +1,7 @@
 lockfileVersion: 5.3
 
 specifiers:
+  '@appgeist/ensure-dir': ^1.1.4
   '@calipsa/wrap-error': ^0.1.6
   '@octokit/rest': ^18.5.3
   '@types/find-config': ^1.0.0
@@ -31,6 +32,7 @@ specifiers:
   typescript: ^4.2.4
 
 dependencies:
+  '@appgeist/ensure-dir': 1.1.4
   '@calipsa/wrap-error': 0.1.6
   '@octokit/rest': 18.5.3
   axios: 0.21.1
@@ -63,6 +65,12 @@ devDependencies:
   typescript: 4.2.4
 
 packages:
+
+  /@appgeist/ensure-dir/1.1.4:
+    resolution: {integrity: sha512-/twYSJzxNDg+iIzzP/M2y4qr1WkmuhqS04ZoUlbdJrv/q5jkRVgajy4RO6wSZVmKtJ222RaSdZntxLDxBPqewA==}
+    dependencies:
+      mkdirp: 0.5.5
+    dev: false
 
   /@babel/code-frame/7.12.11:
     resolution: {integrity: sha512-Zt1yodBx1UcyiePMSkWnU4hPqhwq7hGi2nFL1LeA3EUl+q2LQx16MISgJ0+z7dnmgvP9QtIleuETGOiOH1RcIw==}

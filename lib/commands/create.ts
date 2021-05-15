@@ -16,6 +16,8 @@ import codeLints, { CodeLint } from '../helpers/codeLints'
 import resPath from '../helpers/resPath'
 import createEslintConfig from '../helpers/createEslintConfig'
 import eslintConfigFile from '../helpers/eslintConfigFile'
+import promptGithubWorkflow from '../helpers/promptGithubWorkflow'
+import createLintWorkflow from '../helpers/createLintWorkflow'
 
 const readmeTemplatePath = join(resPath, 'readmeTemplate.md')
 
@@ -95,6 +97,15 @@ const create = async (): Promise<void> => {
   if (codeLint === 'standard' && eslintConfigExists)console.log('Detected .eslintrc.json')
   const writeEslintConfig = !eslintConfigExists || await promptReplaceFile(eslintConfigFile)
 
+  const isGithubRemote = gitRemoteUrl?.startsWith('https://github.com') === true
+  if (isGithubRemote && codeLint === 'standard') {
+    console.log('Detected GitHub remote.')
+  }
+  const createGithubLintWorkflow =
+    isGithubRemote &&
+    codeLint === 'standard' &&
+    await promptGithubWorkflow()
+
   await Promise.all([
     createPackageJson(
       !willBePublished,
@@ -108,7 +119,8 @@ const create = async (): Promise<void> => {
       await readFile(readmeTemplatePath, 'utf8'),
       { name }
     )),
-    writeEslintConfig && createEslintConfig(codeLint)
+    writeEslintConfig && createEslintConfig(codeLint),
+    createGithubLintWorkflow && createLintWorkflow()
   ])
 }
 

@@ -1,6 +1,7 @@
 test/package.json
 test/README.md
 test/.eslintrc.json
+test/.github
 
 # Logs
 logs
