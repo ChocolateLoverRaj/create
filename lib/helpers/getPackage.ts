@@ -1,22 +1,17 @@
 import axios from 'axios'
+import { Package } from './getPackageFromVersion'
 
-export interface Dependencies {
-  [name: string]: string
-}
-
-export interface Package {
-  version: string
-  peerDependencies: Dependencies
+export interface PackageVersions {
+  versions: {
+    [version: string]: Package
+  }
 }
 
 /**
- * Get an npm package from the npm registry
+ * Get all versions of a package
  */
-const getPackage = async (
-  packageName: string,
-  version = 'latest'
-): Promise<Package> => (await axios({
-  url: `https://registry.npmjs.org/${packageName}/${version}`
+const getPackage = async (packageName: string): Promise<PackageVersions> => (await axios({
+  url: `https://registry.npmjs.org/${packageName}`
 })).data
 
 export default getPackage

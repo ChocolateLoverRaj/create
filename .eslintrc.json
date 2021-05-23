@@ -1,6 +1,9 @@
 {
   "extends": "standard-with-typescript",
-  "ignorePatterns": "dist",
+  "ignorePatterns": [
+    "dist",
+    "test"
+  ],
   "root": true,
   "parserOptions": {
     "project": "./tsconfig.json"
@@ -9,6 +12,7 @@
     "max-len": [
       "error",
       100
-    ]
+    ],
+    "no-multi-str": "off"
   }
 }

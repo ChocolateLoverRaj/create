@@ -2,6 +2,9 @@ test/package.json
 test/README.md
 test/.eslintrc.json
 test/.github
+test/lib
+test/.babelrc
+test/pnpm-lock.yaml
 
 # Logs
 logs

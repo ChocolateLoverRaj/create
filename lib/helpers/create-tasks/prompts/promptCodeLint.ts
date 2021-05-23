@@ -1,8 +1,9 @@
 import prompts from 'prompts'
-import abortOnKill from './abortOnKill'
-import codeLints, { CodeLint } from './codeLints'
+import abortOnKill from '../../abortOnKill'
+import codeLints, { CodeLint } from '../../codeLints'
+import { Task } from '../../dependency-queue'
 
-const promptCodeLint = async (): Promise<CodeLint> => (await prompts({
+const promptCodeLint: Task<Promise<CodeLint>, []> = async () => (await prompts({
   message: 'What style code lint should be used?',
   name: 'main',
   type: 'select',
