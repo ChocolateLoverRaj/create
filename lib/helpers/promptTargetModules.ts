@@ -9,6 +9,7 @@ const defaultModules = new Set<Module>()
 const promptTargetModules = async (): Promise<Module[]> => (await prompts({
   name: 'main',
   message: 'What modules will be published?',
+  // cspell:disable-next
   type: 'multiselect',
   choices: modules.map(module => ({
     title: module,
