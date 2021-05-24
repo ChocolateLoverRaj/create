@@ -1,12 +1,15 @@
 import packageNameRegex from 'package-name-regex'
 import prompts from 'prompts'
 import abortOnKill from './abortOnKill'
+import packageExists from './packageExists'
 
-const promptPackageName = async (): Promise<string> => (await prompts({
+const promptPackageName = async (rejectTakenNames = false): Promise<string> => (await prompts({
   message: 'Name of package',
   name: 'main',
   type: 'text',
-  validate: name => packageNameRegex.test(name) || 'Invalid package name',
+  validate: async name => packageNameRegex.test(name)
+    ? !rejectTakenNames || (!await packageExists(name) || 'Package name taken')
+    : 'Invalid package name',
   onState: abortOnKill
 })).main
 

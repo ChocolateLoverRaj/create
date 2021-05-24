@@ -34,7 +34,7 @@ const transpileModules: Task<void, [Module, Set<Module>, PackageJsonEditor]> = {
           data.devDependencies ?? (data.devDependencies = {}),
           Object.fromEntries(await Promise.all(babelPackages.map(async ([packageName, range]) => [
             packageName,
-            (await getLatestPackage(packageName, range)).version ?? never('No package version.')
+            (await getLatestPackage(packageName, range))?.version ?? never('No package version.')
           ])))
         )
       })(), (async () => {

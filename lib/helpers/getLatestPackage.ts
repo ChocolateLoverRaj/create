@@ -6,8 +6,8 @@ import never from 'never'
 /**
  * Get the latest package that matches a semver range
  */
-const getLatestPackage = async (packageName: string, range: string): Promise<Package> => {
-  const packageVersions = await getPackage(packageName)
+const getLatestPackage = async (packageName: string, range: string): Promise<Package | null> => {
+  const packageVersions = await getPackage(packageName) ?? never('Package doesn\'t exist')
   const versions = Object.keys(packageVersions.versions)
   const latestVersion = maxSatisfying(versions, range) ?? never('No satisfying versions')
   return packageVersions.versions[latestVersion]

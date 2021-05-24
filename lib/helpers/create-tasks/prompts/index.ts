@@ -1,5 +1,5 @@
 import { AnyTask, OneByOne } from '../../dependency-queue'
-import promptPackageName from './promptPackageName'
+import promptPackageNameTask from './promptPackageName'
 import findGitRemote from './findGitRemote'
 import findLicenseTask from './findLicense'
 import packageJsonExists from './packageJsonExists'
@@ -17,7 +17,7 @@ const createTasks: Array<AnyTask<any, OneByOne>> = [
   findLicenseTask,
   shouldWriteReadme,
   promptWillBePublished,
-  promptPackageName,
+  promptPackageNameTask,
   promptTargetModules,
   promptSourceModule,
   promptCodeLint,
