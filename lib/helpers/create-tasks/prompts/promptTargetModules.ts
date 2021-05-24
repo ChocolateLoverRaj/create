@@ -10,6 +10,7 @@ const defaultModules = new Set<Module>()
 const promptTargetModules: Task<Promise<Set<Module>>, []> = async () => new Set((await prompts({
   name: 'main',
   message: 'What modules will be published?',
+  // cspell:disable-next
   type: 'multiselect',
   choices: modules.map(module => ({
     title: module,
