@@ -12,6 +12,7 @@ import lintWorkflow from './lintWorkflow'
 import transpileModules from './transpileModules'
 import codeFiles from './codeFiles'
 import readme from './readme'
+import packageJsonExports from './packageJsonExports'
 
 const createTasks = [
   packageJsonTask,
@@ -27,7 +28,8 @@ const createTasks = [
   lintWorkflow,
   transpileModules,
   codeFiles,
-  readme
+  readme,
+  packageJsonExports
 ]
 
 export default createTasks

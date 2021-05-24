@@ -23,6 +23,9 @@ export interface Package {
   }
   devDependencies?: Dependencies
   scripts?: Record<string, string>
+  main?: string
+  type?: 'commonjs' | 'module'
+  exports?: object
 }
 
 /**

@@ -5,15 +5,14 @@ import { join } from 'path'
 import resPath from '../../resPath'
 import { mkdir, copyFile } from 'fs/promises'
 import promptWillBePublished from '../prompts/promptWillBePublished'
+import libDirPath from '../../libDirPath'
+import mainFilePath from '../../mainFilePath'
 
 const libraryPaths: Record<Module, string> = {
   CommonJS: join(resPath, 'library.cjs'),
   ESModules: join(resPath, 'library.mjs')
 }
 const privateProjectPath = join(resPath, 'private.js')
-
-const libDirPath = 'lib'
-const mainFilePath = join(libDirPath, 'index.js')
 
 const codeFiles: Task<void, [boolean, Module]> = {
   dependencies: [promptWillBePublished, promptSourceModule],
