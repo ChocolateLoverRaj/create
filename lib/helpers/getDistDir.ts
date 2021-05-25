@@ -3,13 +3,17 @@ import libDirPath from './libDirPath'
 import moduleDirs from './moduleDirs'
 import { Module } from './modules'
 
-const getCjsDir = (sourceModule: Module, targetModules: Set<Module>): string =>
+const getDistDir = (
+  sourceModule: Module,
+  targetModules: Set<Module>,
+  module: Module = 'CommonJS'
+): string =>
   sourceModule === 'ESModules'
     ? targetModules.has('CommonJS')
       ? targetModules.has('ESModules')
-        ? `${distDirPath}/${moduleDirs.CommonJS}`
+        ? `${distDirPath}/${moduleDirs[module]}`
         : distDirPath
       : libDirPath
     : libDirPath
 
-export default getCjsDir
+export default getDistDir

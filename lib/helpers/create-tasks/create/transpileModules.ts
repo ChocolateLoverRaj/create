@@ -10,7 +10,7 @@ import { join } from 'path'
 import resPath from '../../resPath'
 import { readFile, writeFile } from 'jsonfile'
 import libDirPath from '../../libDirPath'
-import getCjsDir from '../../getCjsDir'
+import getDistDir from '../../getDistDir'
 
 const babelPackages: Array<[string, string]> = [
   ['@babel/core', '^7.14.2'],
@@ -25,16 +25,31 @@ const transpileModules: Task<void, [Module, Set<Module>, PackageJsonEditor]> = {
   fn: (source, targets, packageJson) => {
     if (getTransformModules(targets, source)) {
       const { data } = packageJson
-      Object.assign(data.scripts ?? (data.scripts = {}), {
-        build: `babel ${libDirPath} --out-dir ${getCjsDir(source, targets)}`
-      })
+      const buildCjsScript = `babel ${libDirPath} --out-dir ${getDistDir(source, targets)}`
+      Object.assign(data.scripts ?? (data.scripts = {}), targets.has('ESModules')
+        ? {
+            'build:cjs': buildCjsScript,
+            'build:esm': `cpy ${libDirPath} ${getDistDir(source, targets, 'ESModules')}`,
+            build: 'npm run build:cjs && npm run build:esm'
+          }
+        : {
+            build: buildCjsScript
+          })
       packageJson.beforeWrite.push((async () => {
-        Object.assign(
-          data.devDependencies ?? (data.devDependencies = {}),
-          Object.fromEntries(await Promise.all(babelPackages.map(async ([packageName, range]) => [
+        const devDeps =
+          babelPackages.map<Promise<[string, string]>>(async ([packageName, range]) => [
             packageName,
             (await getLatestPackage(packageName, range))?.version ?? never('No package version.')
-          ])))
+          ])
+        if (targets.has('ESModules')) {
+          devDeps.push((async (): Promise<[string, string]> => [
+            'cpy-cli',
+            (await getLatestPackage('cpy-cli', '^3.1.1'))?.version ?? never('No package version')
+          ])())
+        }
+        Object.assign(
+          data.devDependencies ?? (data.devDependencies = {}),
+          Object.fromEntries(await Promise.all(devDeps))
         )
       })(), (async () => {
         const babelConfig = await readFile(esmBabelConfigPath)
