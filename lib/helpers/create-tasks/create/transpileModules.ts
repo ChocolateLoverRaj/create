@@ -10,8 +10,7 @@ import { join } from 'path'
 import resPath from '../../resPath'
 import { readFile, writeFile } from 'jsonfile'
 import libDirPath from '../../libDirPath'
-import distDirPath from '../../distDirPath'
-import moduleDirs from '../../moduleDirs'
+import getCjsDir from '../../getCjsDir'
 
 const babelPackages: Array<[string, string]> = [
   ['@babel/core', '^7.14.2'],
@@ -27,7 +26,7 @@ const transpileModules: Task<void, [Module, Set<Module>, PackageJsonEditor]> = {
     if (getTransformModules(targets, source)) {
       const { data } = packageJson
       Object.assign(data.scripts ?? (data.scripts = {}), {
-        build: `babel ${libDirPath} --out-dir ${distDirPath}/${moduleDirs.ESModules}`
+        build: `babel ${libDirPath} --out-dir ${getCjsDir(source, targets)}`
       })
       packageJson.beforeWrite.push((async () => {
         Object.assign(
