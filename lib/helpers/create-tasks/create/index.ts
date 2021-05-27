@@ -13,6 +13,7 @@ import transpileModules from './transpileModules'
 import codeFiles from './codeFiles'
 import readme from './readme'
 import packageJsonExports from './packageJsonExports'
+import ts from './ts'
 
 const createTasks = [
   packageJsonTask,
@@ -29,7 +30,8 @@ const createTasks = [
   transpileModules,
   codeFiles,
   readme,
-  packageJsonExports
+  packageJsonExports,
+  ts
 ]
 
 export default createTasks

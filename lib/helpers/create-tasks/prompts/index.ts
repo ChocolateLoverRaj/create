@@ -10,6 +10,7 @@ import promptSourceModule from './promptSourceModule'
 import promptCodeLint from './promptCodeLint'
 import shouldWriteEslintConfig from './shouldWriteEslintConfig'
 import shouldWriteGithubWorkflow from './shouldWriteGithubWorkflow'
+import promptTypeScript from './promptTypeScript'
 
 const createTasks: Array<AnyTask<any, OneByOne>> = [
   packageJsonExists,
@@ -19,6 +20,7 @@ const createTasks: Array<AnyTask<any, OneByOne>> = [
   promptWillBePublished,
   promptPackageNameTask,
   promptTargetModules,
+  promptTypeScript,
   promptSourceModule,
   promptCodeLint,
   shouldWriteEslintConfig,

@@ -9,22 +9,27 @@ import { join } from 'path'
 import { copyFile } from 'fs/promises'
 import resPath from '../../resPath'
 import eslintConfigFile from '../../eslintConfigFile'
+import promptTypeScript from '../prompts/promptTypeScript'
+import tsStandardPackage from '../../tsStandardPackage'
 
 const standardConfigPath = join(resPath, 'standardConfig.json')
+const tsStandardConfigPath = join(resPath, 'tsStandardConfig.json')
 
-const standard: Task<void, [CodeLint, PackageJsonEditor]> = {
-  dependencies: [promptCodeLint, packageJsonTask],
-  fn: async (codeLint, { data, beforeWrite }) => {
+const standard: Task<void, [CodeLint, PackageJsonEditor, boolean]> = {
+  dependencies: [promptCodeLint, packageJsonTask, promptTypeScript],
+  fn: async (codeLint, { data, beforeWrite }, ts) => {
     if (codeLint === 'standard') {
       beforeWrite.push((async () => {
-        const eslintStandardPackage = await getPackageFromVersion(standardPackage)
+        const standardPackageToUse = ts ? tsStandardPackage : standardPackage
+        const eslintStandardPackage =
+          await getPackageFromVersion(standardPackageToUse)
         const eslintStandardPackageVersion =
           eslintStandardPackage.version ?? never('no eslint-config-standard version')
         Object.assign(data.devDependencies ?? (data.devDependencies = {}), {
           ...eslintStandardPackage.peerDependencies,
-          [standardPackage]: `^${eslintStandardPackageVersion}`
+          [standardPackageToUse]: `^${eslintStandardPackageVersion}`
         })
-      })(), copyFile(standardConfigPath, eslintConfigFile))
+      })(), copyFile(ts ? tsStandardConfigPath : standardConfigPath, eslintConfigFile))
     }
   }
 }

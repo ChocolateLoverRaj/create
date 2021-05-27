@@ -1,3 +1,5 @@
+import isNullish from './isNullish'
+
 export type Nullable<T> = T | undefined | null
 
 export type WithUndefined<T> = T | undefined
@@ -10,8 +12,7 @@ const nullishAnd = <R, T extends unknown[]>(
   fn: (...args: T) => R,
   ...args: NullableArray<T>
 ): R | undefined => {
-  const isNullishSymbol = Symbol('is nullish')
-  if (!args.map(v => v ?? isNullishSymbol).includes(isNullishSymbol)) return fn(...args as T)
+  if (args.find(v => isNullish(v)) === undefined) return fn(...args as T)
 }
 
 export default nullishAnd

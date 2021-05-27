@@ -11,6 +11,8 @@ import resPath from '../../resPath'
 import { readFile, writeFile } from 'jsonfile'
 import libDirPath from '../../libDirPath'
 import getDistDir from '../../getDistDir'
+import promptTypeScript from '../prompts/promptTypeScript'
+import tsconfigPaths from '../../tsconfigPaths'
 
 const babelPackages: Array<[string, string]> = [
   ['@babel/core', '^7.14.2'],
@@ -20,21 +22,37 @@ const babelPackages: Array<[string, string]> = [
 
 const esmBabelConfigPath = join(resPath, 'esmBabelConfig.json')
 
-const transpileModules: Task<void, [Module, Set<Module>, PackageJsonEditor]> = {
-  dependencies: [promptSourceModule, promptTargetModules, packageJsonTask],
-  fn: (source, targets, packageJson) => {
-    if (getTransformModules(targets, source)) {
-      const { data } = packageJson
-      const buildCjsScript = `babel ${libDirPath} --out-dir ${getDistDir(source, targets)}`
-      Object.assign(data.scripts ?? (data.scripts = {}), targets.has('ESModules')
-        ? {
-            'build:cjs': buildCjsScript,
-            'build:esm': `cpy ${libDirPath} ${getDistDir(source, targets, 'ESModules')}`,
-            build: 'npm run build:cjs && npm run build:esm'
-          }
-        : {
-            build: buildCjsScript
-          })
+const transpileModules: Task<void, [Module, Set<Module>, PackageJsonEditor, boolean]> = {
+  dependencies: [promptSourceModule, promptTargetModules, packageJsonTask, promptTypeScript],
+  fn: (source, targets, packageJson, ts) => {
+    const { data } = packageJson
+    const addScripts = (scripts: Partial<Record<Module, string>>): void => {
+      Object.assign(
+        data.scripts ?? (data.scripts = {}),
+        targets.has('ESModules') && targets.has('CommonJS')
+          ? {
+              'build:cjs': scripts.CommonJS,
+              'build:esm': scripts.ESModules,
+              build: 'npm run build:cjs && npm run build:esm'
+            }
+          : {
+              build: targets.has('CommonJS') ? scripts.CommonJS : scripts.ESModules
+            }
+      )
+    }
+    if (ts) {
+      const scripts: Partial<Record<Module, string>> = {}
+      const getScript = (targetModule: Module): string => targets.size !== 1
+        ? `tsc --project ${tsconfigPaths[targetModule]}`
+        : 'tsc'
+      if (targets.has('CommonJS')) scripts.CommonJS = getScript('CommonJS')
+      if (targets.has('ESModules')) scripts.ESModules = getScript('ESModules')
+      addScripts(scripts)
+    } else if (getTransformModules(targets, source)) {
+      addScripts({
+        CommonJS: `babel ${libDirPath} --out-dir ${getDistDir(source, targets)}`,
+        ESModules: `cpy ${libDirPath} ${getDistDir(source, targets, 'ESModules')}`
+      })
       packageJson.beforeWrite.push((async () => {
         const devDeps =
           babelPackages.map<Promise<[string, string]>>(async ([packageName, range]) => [

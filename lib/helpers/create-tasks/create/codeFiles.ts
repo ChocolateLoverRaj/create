@@ -6,19 +6,25 @@ import resPath from '../../resPath'
 import { mkdir, copyFile } from 'fs/promises'
 import promptWillBePublished from '../prompts/promptWillBePublished'
 import libDirPath from '../../libDirPath'
-import mainFilePath from '../../mainFilePath'
+import promptTypeScript from '../prompts/promptTypeScript'
+import getMainFileName from '../../getMainFileName'
 
-const libraryPaths: Record<Module, string> = {
+const jsLibraryPaths: Record<Module, string> = {
   CommonJS: join(resPath, 'library.cjs'),
   ESModules: join(resPath, 'library.mjs')
 }
 const privateProjectPath = join(resPath, 'private.js')
+const tsLibraryPath = join(resPath, 'library.ts')
 
-const codeFiles: Task<void, [boolean, Module]> = {
-  dependencies: [promptWillBePublished, promptSourceModule],
-  fn: async (isLibrary, sourceModule) => {
+const codeFiles: Task<void, [boolean, Module, boolean]> = {
+  dependencies: [promptWillBePublished, promptSourceModule, promptTypeScript],
+  fn: async (isLibrary, sourceModule, ts) => {
     await mkdir(libDirPath)
-    await copyFile(isLibrary ? libraryPaths[sourceModule] : privateProjectPath, mainFilePath)
+    await copyFile(isLibrary
+      ? ts ? tsLibraryPath : jsLibraryPaths[sourceModule]
+      : privateProjectPath,
+    join(libDirPath, getMainFileName(ts))
+    )
   }
 }
 

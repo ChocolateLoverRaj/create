@@ -3,10 +3,12 @@ import abortOnKill from '../../abortOnKill'
 import { Task } from '../../dependency-queue'
 import { Module } from '../../modules'
 import promptTargetModules from './promptTargetModules'
+import promptTypeScript from './promptTypeScript'
 
-const promptSourceModule: Task<Promise<Module>, [Set<Module>]> = {
-  dependencies: [promptTargetModules],
-  fn: async targetModules => {
+const promptSourceModule: Task<Promise<Module>, [boolean, Set<Module>]> = {
+  dependencies: [promptTypeScript, promptTargetModules],
+  fn: async (typeScript, targetModules) => {
+    if (typeScript) return 'ESModules'
     const esmTarget = targetModules.has('ESModules')
     const cjsTarget = targetModules.has('CommonJS')
     return (await prompts({

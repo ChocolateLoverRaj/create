@@ -26,6 +26,8 @@ export interface Package {
   main?: string
   type?: 'commonjs' | 'module'
   exports?: object
+  types?: string
+  dependencies?: Dependencies
 }
 
 /**

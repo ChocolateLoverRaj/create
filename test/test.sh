@@ -7,5 +7,8 @@ rm -rf \
   .babelrc \
   .pnpm-debug.log \
   pnpm-lock.yaml \
-  dist
+  dist \
+  tsconfig.json \
+  tsconfigCjs.json \
+  tsconfigEsm.json
 node ../dist/index
