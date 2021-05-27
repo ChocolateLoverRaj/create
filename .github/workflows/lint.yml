@@ -15,9 +15,12 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: 14
-        
-      - name: Install Dependencies
-        run: npm ci
+
+      - name: Setup Pnpm
+        uses: pnpm/action-setup@v2.0.1
+        with:
+          version: 6.4
+          run_install: true
 
       - name: Run Lint
-        run: npm run lint
+        run: pnpm run lint
