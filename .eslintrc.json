@@ -6,7 +6,7 @@
   ],
   "root": true,
   "parserOptions": {
-    "project": "./tsconfig.json"
+    "project": "./eslintTsconfig.json"
   },
   "rules": {
     "max-len": [
