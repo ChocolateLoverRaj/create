@@ -16,8 +16,8 @@ const packageJsonExports: Task<void, [PackageJsonEditor, Set<Module>, Module]> =
     if (targetModules.has('CommonJS') && targetModules.has('ESModules')) {
       packageJson.data.exports = {
         '.': {
-          import: `./${distDirPath}/${moduleDirs.CommonJS}/${getMainFileName}`,
-          require: `./${distDirPath}/${moduleDirs.ESModules}/${getMainFileName}`
+          import: `./${distDirPath}/${moduleDirs.ESModules}/${getMainFileName}`,
+          require: `./${distDirPath}/${moduleDirs.CommonJS}/${getMainFileName}`
         }
       }
     }
