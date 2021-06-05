@@ -1,0 +1,6 @@
+import amazingLibrary from '../{libDirPath}'
+import { strictEqual } from 'assert'
+
+it('is amazing', () => {
+  strictEqual(amazingLibrary, 3)
+})

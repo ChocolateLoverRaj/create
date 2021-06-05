@@ -11,13 +11,22 @@ import { Module } from '../../modules'
 import promptTargetModules from '../prompts/promptTargetModules'
 import tsModules from '../../tsModules'
 import tsconfigPaths from '../../tsconfigPaths'
+import promptTests from '../prompts/promptTests'
+import { Test } from '../../tests'
 
-const ts: Task<void, [boolean, PackageJsonEditor, Set<Module>]> = {
-  dependencies: [promptTypeScript, packageJsonTask, promptTargetModules],
-  fn: async (ts, packageJson, targetModules) => {
+const ts: Task<void, [boolean, PackageJsonEditor, Set<Module>, Test]> = {
+  dependencies: [promptTypeScript, packageJsonTask, promptTargetModules, promptTests],
+  fn: async (ts, packageJson, targetModules, test) => {
     if (!ts) return
     const { data } = packageJson
     data.types = `./${distDirPath}/${moduleDirs.ESModules}/index.d.ts`
+    if (test === 'mocha') {
+      Object.assign(data.scripts ?? (data.scripts = {}), {
+        'build:test': 'tsc',
+        'build:test:watch': 'tsc -w'
+      })
+    }
+
     packageJson.beforeWrite.push((async () => {
       const latestTsVersion = (await getLatestPackage('typescript', '^4.3.2'))?.version ??
         never('No typescript version')
@@ -34,17 +43,18 @@ const ts: Task<void, [boolean, PackageJsonEditor, Set<Module>]> = {
     })())
     await Promise.all([
       writeFile('tsconfig.json', {
-        include: [`./${libDirPath}`],
+        include: test === 'none' ? [`./${libDirPath}`] : undefined,
         compilerOptions: {
           outDir: `./${distDirPath}`,
-          rootDir: `./${libDirPath}`,
+          rootDir: test === 'none' ? `./${libDirPath}` : undefined,
           esModuleInterop: false,
           strictNullChecks: true,
           importHelpers: true,
           module: targetModules.size === 1
             ? tsModules[targetModules.values().next().value]
-            : undefined,
-          declaration: true
+            : test === 'none' ? 'CommonJS' : undefined,
+          declaration: true,
+          moduleResolution: 'node'
         }
       }, { spaces: 2 }),
       ...targetModules.size !== 1
@@ -53,8 +63,10 @@ const ts: Task<void, [boolean, PackageJsonEditor, Set<Module>]> = {
               extends: './tsconfig.json',
               compilerOptions: {
                 module: tsModules[targetModule],
-                outDir: `./${distDirPath}/${moduleDirs[targetModule]}`
-              }
+                outDir: `./${distDirPath}/${moduleDirs[targetModule]}`,
+                rootDir: `./${libDirPath}`
+              },
+              include: [`./${libDirPath}`]
             }, { spaces: 2 })
           })
         : []
