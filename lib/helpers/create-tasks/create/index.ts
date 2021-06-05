@@ -14,6 +14,7 @@ import codeFiles from './codeFiles'
 import readme from './readme'
 import packageJsonExports from './packageJsonExports'
 import ts from './ts'
+import mocha from './mocha'
 
 const createTasks = [
   packageJsonTask,
@@ -31,7 +32,8 @@ const createTasks = [
   codeFiles,
   readme,
   packageJsonExports,
-  ts
+  ts,
+  mocha
 ]
 
 export default createTasks

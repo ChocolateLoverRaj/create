@@ -11,6 +11,7 @@ import promptCodeLint from './promptCodeLint'
 import shouldWriteEslintConfig from './shouldWriteEslintConfig'
 import shouldWriteGithubWorkflow from './shouldWriteGithubWorkflow'
 import promptTypeScript from './promptTypeScript'
+import promptTests from './promptTests'
 
 const createTasks: Array<AnyTask<any, OneByOne>> = [
   packageJsonExists,
@@ -23,6 +24,7 @@ const createTasks: Array<AnyTask<any, OneByOne>> = [
   promptTypeScript,
   promptSourceModule,
   promptCodeLint,
+  promptTests,
   shouldWriteEslintConfig,
   shouldWriteGithubWorkflow
 ]

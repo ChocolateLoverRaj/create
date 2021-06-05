@@ -10,5 +10,6 @@ rm -rf \
   dist \
   tsconfig.json \
   tsconfigCjs.json \
-  tsconfigEsm.json
+  tsconfigEsm.json \
+  test
 node ../dist/index

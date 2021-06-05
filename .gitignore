@@ -8,6 +8,7 @@ test/pnpm-lock.yaml
 test/tsconfig.json
 test/tsconfigCjs.json
 test/tsconfigEsm.json
+test/test
 
 # Logs
 logs
