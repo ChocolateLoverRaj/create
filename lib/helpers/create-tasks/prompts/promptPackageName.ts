@@ -1,15 +1,16 @@
 import { Task } from '../../dependency-queue'
 import getPackage from '../../getPackage'
+import { ProjectType } from '../../projectTypes'
 import promptBoolean from '../../promptBoolean'
 import promptPackageName from '../../promptPackageName'
-import promptWillBePublished from './promptWillBePublished'
+import promptProjectType from './promptProjectType'
 
-const promptPackageNameTask: Task<Promise<string>, [boolean]> = {
-  dependencies: [promptWillBePublished],
-  fn: async willBePublished => {
+const promptPackageNameTask: Task<Promise<string>, [ProjectType]> = {
+  dependencies: [promptProjectType],
+  fn: async projectType => {
     let packageName = await promptPackageName()
     if (
-      willBePublished &&
+      projectType === 'package' &&
       await getPackage(packageName) !== null &&
       await promptBoolean(`A package with the name '${packageName} already exists. \
 Do you want to pick a different name?`, true)) {

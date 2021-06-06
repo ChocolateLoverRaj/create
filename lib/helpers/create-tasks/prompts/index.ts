@@ -3,7 +3,7 @@ import promptPackageNameTask from './promptPackageName'
 import findGitRemote from './findGitRemote'
 import findLicenseTask from './findLicense'
 import packageJsonExists from './packageJsonExists'
-import promptWillBePublished from './promptWillBePublished'
+import promptProjectType from './promptProjectType'
 import shouldWriteReadme from './shouldWriteReadme'
 import promptTargetModules from './promptTargetModules'
 import promptSourceModule from './promptSourceModule'
@@ -18,7 +18,7 @@ const createTasks: Array<AnyTask<any, OneByOne>> = [
   findGitRemote,
   findLicenseTask,
   shouldWriteReadme,
-  promptWillBePublished,
+  promptProjectType,
   promptPackageNameTask,
   promptTargetModules,
   promptTypeScript,
