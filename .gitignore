@@ -1,14 +1,15 @@
-test/package.json
-test/README.md
-test/.eslintrc.json
-test/.github
-test/lib
-test/.babelrc
-test/pnpm-lock.yaml
-test/tsconfig.json
-test/tsconfigCjs.json
-test/tsconfigEsm.json
-test/test
+test-manual/package.json
+test-manual/README.md
+test-manual/.eslintrc.json
+test-manual/.github
+test-manual/lib
+test-manual/.babelrc
+test-manual/pnpm-lock.yaml
+test-manual/tsconfig.json
+test-manual/tsconfigCjs.json
+test-manual/tsconfigEsm.json
+test-manual/test
+test-tmp
 
 # Logs
 logs
