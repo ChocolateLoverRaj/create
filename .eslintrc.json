@@ -2,7 +2,8 @@
   "extends": "standard-with-typescript",
   "ignorePatterns": [
     "dist",
-    "test"
+    "test-manual",
+    "*.snap"
   ],
   "root": true,
   "parserOptions": {

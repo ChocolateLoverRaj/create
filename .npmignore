@@ -1,4 +1,8 @@
 /test
+/test-manual
+/test-tmp
+/test-helpers
+jest.config.js
 .eslintrc.json
 eslintTsconfig.json
 pnpm-lock.yaml
