@@ -32,6 +32,7 @@
     "eslint-plugin-promise": "^4.3.1",
     "jest": "^27.0.4",
     "make-empty-dir": "^2.0.0",
+    "memfs": "^3.2.2",
     "mock-argv": "^2.0.1",
     "release-it": "^14.9.0",
     "ts-jest": "^27.0.2",
@@ -42,7 +43,7 @@
     "test": "jest",
     "test:ci": "jest --ci",
     "start": "node dist/lib/index",
-    "build": "tsc",
+    "build": "tsc --project publishTsconfig.json",
     "prepublishOnly": "npm run build"
   },
   "dependencies": {

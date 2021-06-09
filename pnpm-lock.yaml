@@ -29,6 +29,7 @@ specifiers:
   jest: ^27.0.4
   jsonfile: ^6.1.0
   make-empty-dir: ^2.0.0
+  memfs: ^3.2.2
   mock-argv: ^2.0.1
   never: ^1.0.3
   normalize-path: ^3.0.0
@@ -87,6 +88,7 @@ devDependencies:
   eslint-plugin-promise: 4.3.1
   jest: 27.0.4
   make-empty-dir: 2.0.0
+  memfs: 3.2.2
   mock-argv: 2.0.1
   release-it: 14.9.0
   ts-jest: 27.0.2_jest@27.0.4+typescript@4.3.2
@@ -2400,6 +2402,10 @@ packages:
       mime-types: 2.1.30
     dev: true
 
+  /fs-monkey/1.0.3:
+    resolution: {integrity: sha512-cybjIfiiE+pTWicSCLFHSrXZ6EilF30oh91FDP9S2B051prEa7QWfrVTQm10/dDpswBDXZugPa1Ogu8Yh+HV0Q==}
+    dev: true
+
   /fs.realpath/1.0.0:
     resolution: {integrity: sha1-FQStJSMVjKpA20onh8sBQRmU6k8=}
     dev: true
@@ -3722,6 +3728,13 @@ packages:
     resolution: {integrity: sha1-4BpckQnyr3lmDk6LlYd5AYT1qWw=}
     dependencies:
       tmpl: 1.0.4
+    dev: true
+
+  /memfs/3.2.2:
+    resolution: {integrity: sha512-RE0CwmIM3CEvpcdK3rZ19BC4E6hv9kADkMN5rPduRak58cNArWLi/9jFLsa4rhsjfVxMP3v0jO7FHXq7SvFY5Q==}
+    engines: {node: '>= 4.0.0'}
+    dependencies:
+      fs-monkey: 1.0.3
     dev: true
 
   /merge-stream/2.0.0:
