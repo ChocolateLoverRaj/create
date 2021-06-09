@@ -16,6 +16,7 @@ specifiers:
   '@types/prompts': ^2.0.11
   '@types/semver': ^7.3.6
   '@typescript-eslint/eslint-plugin': ^4.23.0
+  ansi-parser: ^3.2.10
   axios: ^0.21.1
   commander: ^7.2.0
   concat-stream: ^2.0.0
@@ -77,6 +78,7 @@ devDependencies:
   '@types/prompts': 2.0.11
   '@types/semver': 7.3.6
   '@typescript-eslint/eslint-plugin': 4.23.0_eslint@7.26.0+typescript@4.3.2
+  ansi-parser: 3.2.10
   concat-stream: 2.0.0
   eslint: 7.26.0
   eslint-config-standard-with-typescript: 20.0.0_a94ec9da3f51b9f9ad707a396574bc74
@@ -1193,6 +1195,10 @@ packages:
     engines: {node: '>=8'}
     dependencies:
       type-fest: 0.21.3
+    dev: true
+
+  /ansi-parser/3.2.10:
+    resolution: {integrity: sha512-CGKGIbd678lm15IXJXI1cTyOVAnMQw0jES+klW/yIc+GzYccsYanLMhczPIIj2hE64B79g75QfiuWrEWd6nJdg==}
     dev: true
 
   /ansi-regex/4.1.0:
