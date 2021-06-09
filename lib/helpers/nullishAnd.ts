@@ -12,7 +12,7 @@ const nullishAnd = <R, T extends unknown[]>(
   fn: (...args: T) => R,
   ...args: NullableArray<T>
 ): R | undefined => {
-  if (args.find(v => isNullish(v)) === undefined) return fn(...args as T)
+  if (!args.some(v => isNullish(v))) return fn(...args as T)
 }
 
 export default nullishAnd
