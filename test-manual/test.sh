@@ -11,5 +11,6 @@ rm -rf \
   tsconfig.json \
   tsconfigCjs.json \
   tsconfigEsm.json \
-  test
+  test \
+  eslintTsconfig.json
 node ../dist/index
