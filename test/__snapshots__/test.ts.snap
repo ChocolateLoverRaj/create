@@ -1,3 +1,82 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`detects MIT license prints text: Detected License Text 1`] = `"Detected license: MIT"`;
+
+exports[`standard lint standard: .eslintrc.json 1`] = `
+"{
+  \\"root\\": true,
+  \\"extends\\": \\"standard\\",
+  \\"ignorePatterns\\": \\"/dist\\"
+}
+"
+`;
+
+exports[`standard lint standard: dev dependencies 1`] = `
+Object {
+  "eslint": "***",
+  "eslint-config-standard": "***",
+  "eslint-plugin-import": "***",
+  "eslint-plugin-node": "***",
+  "eslint-plugin-promise": "***",
+}
+`;
+
+exports[`standard lint ts-standard with mocha: .eslintrc.json 1`] = `
+"{
+  \\"root\\": true,
+  \\"extends\\": \\"standard-with-typescript\\",
+  \\"ignorePatterns\\": \\"/dist\\",
+  \\"parserOptions\\": {
+    \\"project\\": \\"./eslintTsconfig.json\\"
+  }
+}
+"
+`;
+
+exports[`standard lint ts-standard with mocha: dev dependencies 1`] = `
+Object {
+  "@types/mocha": "***",
+  "@typescript-eslint/eslint-plugin": "***",
+  "eslint": "***",
+  "eslint-config-standard-with-typescript": "***",
+  "eslint-plugin-import": "***",
+  "eslint-plugin-node": "***",
+  "eslint-plugin-promise": "***",
+  "mocha": "***",
+  "typescript": "***",
+}
+`;
+
+exports[`standard lint ts-standard with mocha: eslintTsconfig.json 1`] = `
+"{
+  \\"extends\\": \\"./tsconfig.json\\",
+  \\"include\\": \\"**/*.ts\\"
+}
+"
+`;
+
+exports[`standard lint ts-standard without mocha: .eslintrc.json 1`] = `
+"{
+  \\"root\\": true,
+  \\"extends\\": \\"standard-with-typescript\\",
+  \\"ignorePatterns\\": \\"/dist\\",
+  \\"parserOptions\\": {
+    \\"project\\": \\"./eslintTsconfig.json\\"
+  }
+}
+"
+`;
+
+exports[`standard lint ts-standard without mocha: dev dependencies 1`] = `
+Object {
+  "@types/mocha": "***",
+  "@typescript-eslint/eslint-plugin": "***",
+  "eslint": "***",
+  "eslint-config-standard-with-typescript": "***",
+  "eslint-plugin-import": "***",
+  "eslint-plugin-node": "***",
+  "eslint-plugin-promise": "***",
+  "mocha": "***",
+  "typescript": "***",
+}
+`;

@@ -1,51 +1,58 @@
 import { spawn, SpawnOptionsWithoutStdio } from 'child_process'
 import concat from 'concat-stream'
+import { once } from 'events'
+import { removeAnsi } from 'ansi-parser'
 
-export default async function (
+export default async (
   args: string[],
   inputs: string[] = [],
-  options?: SpawnOptionsWithoutStdio,
-  timeout = 200
-): Promise<string> {
+  options?: SpawnOptionsWithoutStdio
+): Promise<string> => {
   const proc = spawn('node', args, options)
   proc.stdin.setDefaultEncoding('utf-8')
 
-  let handle: NodeJS.Timeout
-
-  // TODO: Currently it writes every 200 ms or timeout, but it should figure out when
-  // the input is ready. This will make it not too fast or too slow, and will
-  // work on slow computers
-  const loop = function (inputs: string[]): void {
-    if (inputs.length > 0) {
-      handle = setTimeout(function () {
-        proc.stdin.write(inputs[0])
-        loop(inputs.slice(1))
-      }, timeout)
-    } else {
-      proc.stdin.end()
-    }
-  }
-
-  loop(inputs)
-
-  return new Promise(function (resolve, reject) {
-    proc.once('exit', code => {
-      clearTimeout(handle)
-      if (code === 0) resolve(stdoutResult)
-      else {
-        reject(new Error(
-          `Process exited with code: ${code ?? 'null'}\n\nStderr below:\n${stderrResult}`
-        ))
+  let stdoutResult = ''
+  proc.stdout.pipe(concat(function (result) {
+    stdoutResult = result.toString()
+  }))
+  let stderrResult = ''
+  proc.stderr.pipe(concat(result => {
+    stderrResult = result.toString()
+  }))
+  return new Promise((resolve, reject) => {
+    (async () => {
+      for (let i = 0; i < inputs.length; i++) {
+        let lastStr = ''
+        while (true) {
+          const [data] = await once(proc.stdout, 'data') as [Buffer]
+          const str = data.toString()
+          // Annoying ANSI escapes:
+          // https://gist.github.com/fnky/458719343aabd01cfb17a3a4f7296797#erase-functions
+          const visibleStr = str.slice(str.lastIndexOf('\x1b[2K'))
+          const visibleStrText = removeAnsi(visibleStr)
+            // Ignore select inputs
+            .replace('>', ' ')
+            // Ignore multi select inputs
+            .replace('(*)', '( )')
+          const shouldAnswer = visibleStr.includes('\u00BB') && lastStr !== visibleStrText
+          // console.log([visibleStrText], shouldAnswer, i, inputs.length)
+          lastStr = visibleStrText
+          if (shouldAnswer) break
+        }
+        proc.stdin.write(inputs[i])
       }
-    })
-    let stdoutResult: string
-    proc.stdout.pipe(concat(function (result) {
-      stdoutResult = result.toString()
-    }))
-    let stderrResult: string
-    proc.stderr.pipe(concat(result => {
-      stderrResult = result.toString()
-    }))
+      proc.stdin.end()
+      // console.log('Done with prompts')
+    })().catch(reject);
+    (async () => {
+      const [code] = await once(proc, 'exit') as [number]
+      if (code === 0) return stdoutResult
+      else {
+        throw new Error(
+        `Process exited with code: ${code}\n\nStderr below:\n${stderrResult}`
+        )
+      }
+    })().then(resolve, reject)
   })
 }
 
