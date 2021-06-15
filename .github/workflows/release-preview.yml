@@ -18,7 +18,7 @@ jobs:
         version: 6.4
     - id: get_increment
       name: Get Increment
-      uses: ChocolateLoverRaj/detect-increment@v1.1
+      uses: ChocolateLoverRaj/detect-increment@v1.2
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     - id: capitalize_increment
