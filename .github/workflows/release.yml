@@ -19,7 +19,7 @@ jobs:
         run_install: true
     - id: get_increment
       name: Get Increment
-      uses: ChocolateLoverRaj/detect-increment@v1.1
+      uses: ChocolateLoverRaj/detect-increment@v1.2
     - if: steps.get_increment.outputs.increment != 'none'
       name: Setup GitHub Author
       run: |
