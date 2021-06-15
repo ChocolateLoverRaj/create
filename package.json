@@ -64,5 +64,8 @@
     "pupa": "^2.1.1",
     "semver": "^7.3.5",
     "tslib": "^2.2.0"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }
