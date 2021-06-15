@@ -9,6 +9,7 @@ test-manual/tsconfig.json
 test-manual/tsconfigCjs.json
 test-manual/tsconfigEsm.json
 test-manual/test
+test-manual/eslintTsconfig.json
 test-tmp
 
 # Logs
