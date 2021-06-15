@@ -1,12 +1,21 @@
-import realPrompt from 'prompts'
-import prompt from '../__mocks__/prompts'
 import { readdirSync } from 'fs'
 import { vol } from 'memfs'
 import { mock, fn, restore } from '../../../test-helpers/mockProcessCwd'
+import promptBoolean from '../../helpers/promptBoolean'
+import promptString from '../../helpers/promptString'
+import { answerQueue, myPromptBoolean } from '../../../test-helpers/mockPrompts'
 
 jest.mock('fs')
+jest.mock('../../helpers/promptBoolean')
+jest.mock('../../helpers/promptString')
+jest.mock('../../helpers/promptSelectMulti')
+jest.mock('../../helpers/promptSelect')
 test('mock prompts', async () => {
-  expect(realPrompt).toBe(prompt)
+  answerQueue.push(true, 'Bob')
+  expect(promptBoolean).toEqual(myPromptBoolean)
+  console.log('was here')
+  await expect(promptBoolean('Is someone there?')).resolves.toBe(true)
+  await expect(promptString('What\'s your name?')).resolves.toBe('Bob')
 })
 
 test('mock fs', () => {

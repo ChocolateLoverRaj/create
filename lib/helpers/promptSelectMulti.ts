@@ -5,26 +5,29 @@ interface Choice<T extends string = string> {
   value: T
   description?: string
   disabled?: boolean
+  selected?: boolean
 }
 
-const promptSelect = async <T extends string = string>(
+const promptSelectMulti = async <T extends string = string>(
   message: string,
   choices: ReadonlyArray<T | Choice<T>>,
-  initial?: number
-): Promise<T> => (await prompts({
+  min?: number
+): Promise<T[]> => (await prompts({
   message,
   name: 'main',
-  type: 'select',
+  // cspell: disable-next-line
+  type: 'multiselect',
   choices: choices.map<PromptsChoice>(option => typeof option === 'string'
     ? { title: option, value: option }
     : {
         title: option.value,
         value: option.value,
         description: option.description,
-        disabled: option.disabled
+        disabled: option.disabled,
+        selected: option.selected
       }),
-  initial,
-  onState: abortOnKill
+  onState: abortOnKill,
+  min
 })).main
 
-export default promptSelect
+export default promptSelectMulti
