@@ -2,9 +2,12 @@
   "cSpell.words": [
     "Octokit",
     "Paranjpe",
+    "Semver",
     "appgeist",
     "calipsa",
+    "noreply",
     "pnpm",
+    "pnpx",
     "programmerraj"
   ],
   "typescript.format.semicolons": "remove",
