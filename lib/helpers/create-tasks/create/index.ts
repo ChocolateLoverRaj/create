@@ -8,7 +8,7 @@ import packageJsonName from './packageJsonName'
 import packageJsonPrivate from './packageJsonPrivate'
 import packageJsonRepository from './packageJsonRepository'
 import packageJsonVersion from './packageJsonVersion'
-import lintWorkflow from './lintWorkflow'
+import ghWorkflows from './ghWorkflows'
 import transpileModules from './transpileModules'
 import codeFiles from './codeFiles'
 import readme from './readme'
@@ -27,7 +27,7 @@ const createTasks = [
   packageJsonRepository,
   standard,
   lintScript,
-  lintWorkflow,
+  ghWorkflows,
   transpileModules,
   codeFiles,
   readme,

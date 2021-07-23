@@ -36,7 +36,7 @@ Checks for a `LICENSE` file and uses the name of that license.
 Currently, [standard](https://standardjs.com/) code style can be used. This sets up all the dev dependencies needed for eslint with standard.
 
 ### Generates GitHub Actions workflow
-A GitHub workflow that checks the code style can be added.
+A GitHub workflow that checks the code style and runs tests can be added.
 
 ### Creates [`README.md`](https://en.wikipedia.org/wiki/README)
 Adds the name of the package, as well as badges to the README.
