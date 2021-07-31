@@ -39,7 +39,7 @@ const standard: Task<void, [CodeLint, PackageJsonEditor, boolean, Test]> = {
           : undefined
       }, { spaces: 2 }), ts && test === 'mocha' && writeFile(eslintTsconfigPath, {
         extends: './tsconfig.json',
-        include: '**/*.ts'
+        include: ['**/*.ts']
       }, { spaces: 2 }))
     }
   }
