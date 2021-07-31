@@ -10,6 +10,7 @@ test-manual/tsconfigCjs.json
 test-manual/tsconfigEsm.json
 test-manual/test
 test-manual/eslintTsconfig.json
+test-manual/docs
 test-tmp
 
 # Logs
