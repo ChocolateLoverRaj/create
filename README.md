@@ -1,4 +1,4 @@
-[![License](https://badgen.net/github/license/ChocolateLoverRaj/create)](https://github.com/ChocolateLoverRaj/create/blob/master/LICENSE)
+[![License](https://badgen.net/github/license/ChocolateLoverRaj/create)](https://github.com/ChocolateLoverRaj/create/blob/main/LICENSE)
 [![TS-Standard - Typescript Standard Style Guide](https://badgen.net/badge/code%20style/ts-standard/blue?icon=typescript)](https://github.com/standard/ts-standard)
 [![Npm Version](https://badgen.net/npm/v/@programmerraj/create)](https://npmjs.com/package/@programmerraj/create)
 # create
