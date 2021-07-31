@@ -15,6 +15,7 @@ import readme from './readme'
 import packageJsonExports from './packageJsonExports'
 import ts from './ts'
 import mocha from './mocha'
+import typedoc from './typedoc'
 
 const createTasks = [
   packageJsonTask,
@@ -33,7 +34,8 @@ const createTasks = [
   readme,
   packageJsonExports,
   ts,
-  mocha
+  mocha,
+  typedoc
 ]
 
 export default createTasks
