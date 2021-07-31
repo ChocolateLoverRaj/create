@@ -58,3 +58,8 @@ This CLI does not run `npm i` itself. This is so you can use whatever package in
 
 ### Generate docs with [Typedoc](https://typedoc.org/)
 For projects using TypeScript, there is an option to add typedoc to `devDependencies` and add a script for building docs.
+
+### Easily maintain and publish packages
+One of the main tasks when creating and maintaining npm packages is releasing new versions and publishing it to npm.
+
+Using GitHub Actions, [Release It](https://github.com/release-it/release-it), [Detect Increment](https://github.com/ChocolateLoverRaj/detect-increment), and [Label Manager](https://github.com/ChocolateLoverRaj/label-manager), contributors can and maintainers can spend valuable time doing the real work - writing and reviewing code. Incrementing the version and publishing to npm will be done automatically. 
