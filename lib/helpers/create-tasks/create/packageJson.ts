@@ -14,7 +14,11 @@ const packageJsonTask: Task<PackageJsonEditor, [typeof afterAll], FastestParalle
   fn: afterAll => {
     const packageJsonEditor: PackageJsonEditor = {
       beforeWrite: [],
-      data: {}
+      data: {
+        scripts: {
+          prepublishOnly: 'npm run build'
+        }
+      }
     } as unknown as PackageJsonEditor
     packageJsonEditor.finishPromise = (async () => {
       // Let other tasks mutate packageJsonEditor first
