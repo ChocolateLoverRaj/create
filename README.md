@@ -58,7 +58,7 @@ This package sets up [Mocha](https://mochajs.org/), and even adds [`@types/mocha
 This CLI does not run `npm i` itself. This is so you can use whatever package installer you use. Whether you use [Npm](https://www.npmjs.com/), [Pnpm](https://pnpm.io/), [Yarn](https://yarnpkg.com/), or something else, you just need to install the dependencies in `package.json` after running the CLI.
 
 ### Generate docs with [Typedoc](https://typedoc.org/)
-For projects using TypeScript, there is an option to add typedoc to `devDependencies` and add a script for building docs.
+For projects using TypeScript, there is an option to add typedoc to `devDependencies` and add a script for building docs. You can also use GitHub Actions to build the documentation to GitHub Pages. 
 
 ### Easily maintain and publish packages
 One of the main tasks when creating and maintaining npm packages is releasing new versions and publishing it to npm.

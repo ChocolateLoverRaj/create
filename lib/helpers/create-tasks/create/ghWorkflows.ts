@@ -18,6 +18,7 @@ const pnpmVersion = '6.7'
 const detectIncrementVersion = 'v1.2'
 const changeStringCaseVersion = 'v2'
 const labelManagerVersion = 'v1.0'
+const ghPagesActionVersion = 'v2'
 
 const ghWorkflows: Task<void, [Set<Workflow>]> = {
   dependencies: [shouldWriteGithubWorkflow],
@@ -94,6 +95,7 @@ const ghWorkflows: Task<void, [Set<Workflow>]> = {
       }
       const ghActionsBotEmail = '41898282+github-actions[bot]@users.noreply.github.com'
       const ifIncrement = `steps.${getIncrementId}.outputs.increment != 'none'`
+      const elseIncrement = `steps.${getIncrementId}.outputs.increment == 'none'`
       promises.push(
         writeFile(join(workflowsDir, 'release-preview.yaml'), yamlToString({
           name: 'Release Preview',
@@ -157,7 +159,21 @@ const ghWorkflows: Task<void, [Set<Workflow>]> = {
                   // eslint-disable-next-line no-template-curly-in-string
                   NPM_TOKEN: '${{ secrets.NPM_TOKEN }}'
                 }
-              }]
+              }, ...workflows.has('docs')
+                ? [{
+                    if: elseIncrement,
+                    name: 'Build Docs',
+                    run: 'pnpm build:docs'
+                  }, {
+                    name: 'Deploy Docs to GitHub Pages',
+                    uses: `crazy-max/ghaction-github-pages@${ghPagesActionVersion}`,
+                    with: {
+                      build_dir: 'docs',
+                      jekyll: false
+                    },
+                    env: githubTokenEnv
+                  }]
+                : []]
             }
           }
         }))

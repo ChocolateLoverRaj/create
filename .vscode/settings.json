@@ -9,7 +9,8 @@
     "noreply",
     "pnpm",
     "pnpx",
-    "programmerraj"
+    "programmerraj",
+    "ghaction"
   ],
   "typescript.format.semicolons": "remove",
   "typescript.tsdk": "node_modules\\typescript\\lib"
