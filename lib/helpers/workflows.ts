@@ -1,4 +1,4 @@
-const workflows = ['lint', 'test', 'release'] as const
+const workflows = ['lint', 'test', 'release', 'docs'] as const
 
 export type Workflow = typeof workflows[number]
 
