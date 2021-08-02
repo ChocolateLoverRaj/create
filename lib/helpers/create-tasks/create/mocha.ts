@@ -28,7 +28,10 @@ const mocha: Task<void, [Test, PackageJsonEditor, boolean, Module, Set<Module>]>
     })
     beforeWrite.push((async () => {
       Object.assign(data.devDependencies ?? (data.devDependencies = {}), {
-        mocha: `^${await getLatestPackageVersion('mocha', '^8.4.0')}`,
+        mocha: `^${await getLatestPackageVersion('mocha', '^8.4.0')}`
+      })
+    })(), ts && (async () => {
+      Object.assign(data.devDependencies ?? (data.devDependencies = {}), {
         '@types/mocha': `^${await getLatestPackageVersion('@types/mocha', '8')}`
       })
     })())
