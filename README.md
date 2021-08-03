@@ -52,7 +52,7 @@ Using [Babel](https://babeljs.io/) or [TypeScript](https://www.typescriptlang.or
 Use typescript with one key press. The [compiling](#Easily-support-CommonJS-and-ESModules) and `tsconfig.json` will be setup.
 
 ### Add tests
-This package sets up [Mocha](https://mochajs.org/), and even adds [`@types/mocha`](https://www.npmjs.com/package/@types/mocha) to your `devDependencies` if you're using TypeScript.
+This package sets up [Mocha](https://mochajs.org/) or [Jest](https://jestjs.io/), and even adds types to your `devDependencies` if you're using TypeScript.
 
 ### Use with any package installer
 This CLI does not run `npm i` itself. This is so you can use whatever package installer you use. Whether you use [Npm](https://www.npmjs.com/), [Pnpm](https://pnpm.io/), [Yarn](https://yarnpkg.com/), or something else, you just need to install the dependencies in `package.json` after running the CLI.

@@ -1,4 +1,4 @@
-const tests = ['none', 'mocha'] as const
+const tests = ['none', 'mocha', 'jest'] as const
 
 export type Test = typeof tests[number]
 

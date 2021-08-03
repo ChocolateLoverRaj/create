@@ -14,7 +14,7 @@ import codeFiles from './codeFiles'
 import readme from './readme'
 import packageJsonExports from './packageJsonExports'
 import ts from './ts'
-import mocha from './mocha'
+import testsTask from './tests'
 import typedoc from './typedoc'
 import releaseIt from './releaseIt'
 
@@ -35,7 +35,7 @@ const createTasks = [
   readme,
   packageJsonExports,
   ts,
-  mocha,
+  testsTask,
   typedoc,
   releaseIt
 ]

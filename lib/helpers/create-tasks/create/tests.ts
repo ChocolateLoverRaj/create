@@ -10,8 +10,9 @@ import promptTests from '../prompts/promptTests'
 import promptTypeScript from '../prompts/promptTypeScript'
 import packageJsonTask, { PackageJsonEditor } from './packageJson'
 import testDir from './testDir'
+import { major, minor } from 'semver'
 
-const mocha: Task<void, [Test, PackageJsonEditor, boolean, Module, Set<Module>]> = {
+const testsTask: Task<void, [Test, PackageJsonEditor, boolean, Module, Set<Module>]> = {
   dependencies: [
     promptTests,
     packageJsonTask,
@@ -20,22 +21,31 @@ const mocha: Task<void, [Test, PackageJsonEditor, boolean, Module, Set<Module>]>
     promptTargetModules
   ],
   fn: async (test, { data, beforeWrite }, ts, sourceModule, targetModules) => {
-    if (test !== 'mocha') return
+    if (test === 'none') return
     Object.assign(data.scripts ?? (data.scripts = {}), {
-      test: ts
-        ? `mocha ${distDirPath}/${testDir}`
-        : `mocha ${getDistDir({ sourceModule, targetModules })}`
+      test: test === 'mocha'
+        ? ts
+          ? `mocha ${distDirPath}/${testDir}`
+          : `mocha ${getDistDir({ sourceModule, targetModules })}`
+        : 'jest'
     })
+
+    const packageVersions: { [K in Exclude<Test, 'none'>]: string } = {
+      mocha: '8.4.0',
+      jest: '27.0.6'
+    }
+
     beforeWrite.push((async () => {
       Object.assign(data.devDependencies ?? (data.devDependencies = {}), {
-        mocha: `^${await getLatestPackageVersion('mocha', '^8.4.0')}`
+        [test]: `^${await getLatestPackageVersion('mocha', '^8.4.0')}`
       })
     })(), ts && (async () => {
       Object.assign(data.devDependencies ?? (data.devDependencies = {}), {
-        '@types/mocha': `^${await getLatestPackageVersion('@types/mocha', '8')}`
+        [`@types/${test}`]: `^${await getLatestPackageVersion(`@types/${test}`,
+          `<=${major(packageVersions[test])}.${minor(packageVersions[test])}`)}`
       })
     })())
   }
 }
 
-export default mocha
+export default testsTask
