@@ -24,7 +24,7 @@ Promise<Set<Workflow>>,
     const isGithubRemote = git?.remoteUrl?.startsWith('https://github.com') === true
     const possibleWorkflows: Record<Workflow, boolean> = {
       lint: codeLint === 'standard',
-      test: tests === 'mocha',
+      test: tests !== 'none',
       release: willBePublished,
       docs: ts
     }
