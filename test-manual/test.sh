@@ -13,5 +13,6 @@ tsconfigCjs.json \
 tsconfigEsm.json \
 test \
 eslintTsconfig.json \
-.release-it.json
+.release-it.json \
+jest.config.js
 node ../dist/index
