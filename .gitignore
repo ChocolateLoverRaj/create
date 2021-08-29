@@ -12,6 +12,7 @@ test-manual/test
 test-manual/eslintTsconfig.json
 test-manual/docs
 test-manual/.release-it.json
+test-manual/jest.config.js
 test-tmp
 
 # Logs

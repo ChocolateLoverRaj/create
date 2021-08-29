@@ -1,0 +1,5 @@
+import amazingLibrary from '../{mainFileBaseName}'
+
+test('is amazing', () => {
+  expect(amazingLibrary).toBe(3)
+})
