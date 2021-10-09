@@ -13,6 +13,9 @@ test-manual/eslintTsconfig.json
 test-manual/docs
 test-manual/.release-it.json
 test-manual/jest.config.js
+test-manual/.storybook
+test-manual/babelConfigCjs.json
+test-manual/babelConfigEsm.json
 test-tmp
 
 # Logs

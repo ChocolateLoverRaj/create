@@ -11,19 +11,47 @@ import libDirPath from '../../libDirPath'
 import getDistDir from '../../getDistDir'
 import promptTypeScript from '../prompts/promptTypeScript'
 import tsconfigPaths from '../../tsconfigPaths'
-import getLatestPackageVersion from '../../getLatestPackageVersion'
+import babelCoreVersion from '../../babelCoreVersion'
+import babelCliVersion from '../../babelCliVersion'
+import resolvePackageVersions from '../../../resolvePackageVersions'
+import promptReact from '../prompts/promptReact'
+import promptDocs, { Docs } from '../prompts/promptDocs'
+import babelConfigPaths from '../../babelConfigPaths'
+import { Test } from '../../tests'
+import promptTests from '../prompts/promptTests'
+import writeBabelConfig from '../../writeBabelConfig'
 
-const babelPackages: Array<[string, string]> = [
-  ['@babel/core', '^7.14.2'],
-  ['@babel/cli', '^7.13.16'],
-  ['@babel/plugin-transform-modules-commonjs', '^7.14.0']
-]
+const babelCorePackages = {
+  '@babel/core': babelCoreVersion,
+  '@babel/cli': babelCliVersion
+}
+
+const babelTransformModulesPackages = {
+  '@babel/plugin-transform-modules-commonjs': '^7.14.0'
+}
+
+const babelReactPackages = {
+  ...babelCorePackages,
+  '@babel/preset-typescript': '^7.15.0',
+  'babel-plugin-react-require': '^3.1.3',
+  ...babelTransformModulesPackages,
+  '@babel/preset-react': '^7.14.5'
+}
 
 const esmBabelConfigPath = join(resPath, 'esmBabelConfig.json')
 
-const transpileModules: Task<void, [Module, Set<Module>, PackageJsonEditor, boolean]> = {
-  dependencies: [promptSourceModule, promptTargetModules, packageJsonTask, promptTypeScript],
-  fn: (sourceModule, targetModules, packageJson, ts) => {
+const transpileModules: Task<
+void, [Module, Set<Module>, PackageJsonEditor, boolean, boolean, Docs, Test]> = {
+  dependencies: [
+    promptSourceModule,
+    promptTargetModules,
+    packageJsonTask,
+    promptTypeScript,
+    promptReact,
+    promptDocs,
+    promptTests
+  ],
+  fn: (sourceModule, targetModules, packageJson, ts, react, docs, tests) => {
     const { data } = packageJson
     const addScripts = (scripts: Partial<Record<Module, string>>): void => {
       Object.assign(
@@ -41,11 +69,60 @@ const transpileModules: Task<void, [Module, Set<Module>, PackageJsonEditor, bool
     }
     if (ts) {
       const scripts: Partial<Record<Module, string>> = {}
-      const getScript = (targetModule: Module): string => targetModules.size !== 1
-        ? `tsc --project ${tsconfigPaths[targetModule]}`
-        : 'tsc'
-      if (targetModules.has('CommonJS')) scripts.CommonJS = getScript('CommonJS')
-      if (targetModules.has('ESModules')) scripts.ESModules = getScript('ESModules')
+      if (react) {
+        packageJson.beforeWrite.push((async () => {
+          Object.assign(data.devDependencies ?? (data.devDependencies = {}),
+            await resolvePackageVersions(babelCorePackages))
+        })(), (async () => {
+          const getBuildCommand = (module?: Module): string => {
+            const ignore: string[] = []
+            if (docs === Docs.STORYBOOK) ignore.push('**/*.stories.tsx')
+            if (tests === 'jest') ignore.push('**/__tests__')
+            return [
+              'babel',
+              ...module !== undefined ? ['--config-file', `./${babelConfigPaths[module]}`] : [],
+              libDirPath,
+              '--out-dir',
+              getDistDir({ sourceModule, targetModules, ts, module }),
+              '--extensions',
+              '".tsx"',
+              ...ignore.length > 0 ? ['--ignore', ignore.toString()] : []
+            ].join(' ')
+          }
+          if (targetModules.size > 1) {
+            targetModules.forEach(module => {
+              scripts[module] = getBuildCommand(module)
+            })
+            await Promise.all<unknown>([
+              Object.assign(
+                packageJson.data.devDependencies ?? (packageJson.data.dependencies = {}),
+                await resolvePackageVersions({
+                  ...babelReactPackages,
+                  ...babelTransformModulesPackages
+                })),
+              ...[...targetModules].map(async targetModule => await writeBabelConfig(targetModule))
+            ])
+          } else {
+            const targetModule: Module = targetModules.keys().next().value
+            scripts[targetModule] = getBuildCommand()
+            await Promise.all([
+              Object.assign(
+                packageJson.data.devDependencies ?? (packageJson.data.dependencies = {}),
+                await resolvePackageVersions({
+                  ...babelReactPackages,
+                  ...targetModule === 'CommonJS' ? babelTransformModulesPackages : undefined
+                })),
+              writeBabelConfig(targetModule, true)
+            ])
+          }
+        })())
+      } else {
+        const getScript = (targetModule: Module): string => targetModules.size !== 1
+          ? `tsc --project ${tsconfigPaths[targetModule]}`
+          : 'tsc'
+        if (targetModules.has('CommonJS')) scripts.CommonJS = getScript('CommonJS')
+        if (targetModules.has('ESModules')) scripts.ESModules = getScript('ESModules')
+      }
       addScripts(scripts)
     } else if (getTransformModules(targetModules, sourceModule)) {
       const esmDistDir = getDistDir({ sourceModule, targetModules, module: 'ESModules' })
@@ -53,23 +130,18 @@ const transpileModules: Task<void, [Module, Set<Module>, PackageJsonEditor, bool
         CommonJS: `babel ${libDirPath} --out-dir ${getDistDir({ sourceModule, targetModules })}`,
         ESModules: `cpy ${libDirPath} ${esmDistDir}`
       })
-      packageJson.beforeWrite.push((async () => {
-        const devDeps =
-          babelPackages.map<Promise<[string, string]>>(async ([packageName, range]) => [
-            packageName,
-            await getLatestPackageVersion(packageName, range)
-          ])
-        if (targetModules.has('ESModules')) {
-          devDeps.push((async (): Promise<[string, string]> => [
-            'cpy-cli',
-            await getLatestPackageVersion('cpy-cli', '^3.1.1')
-          ])())
+      packageJson.beforeWrite.push((async () => Object.assign(
+        data.devDependencies ?? (data.devDependencies = {}),
+        {
+          ...await resolvePackageVersions({
+            ...babelCorePackages,
+            ...babelTransformModulesPackages
+          }),
+          ...targetModules.has('ESModules') && {
+            'cpy-cli': '^3.1.1'
+          }
         }
-        Object.assign(
-          data.devDependencies ?? (data.devDependencies = {}),
-          Object.fromEntries(await Promise.all(devDeps))
-        )
-      })(), (async () => {
+      ))(), (async () => {
         const babelConfig = await readFile(esmBabelConfigPath)
         delete babelConfig.$schema
         await writeFile('.babelrc', babelConfig, { spaces: 2 })

@@ -2,15 +2,15 @@ import { Task } from '../../dependency-queue'
 import getLatestPackage from '../../getLatestPackage'
 import getMainFileName from '../../getMainFileName'
 import libDirPath from '../../libDirPath'
-import promptTypedoc from '../prompts/promptTypedoc'
+import promptDocs, { Docs } from '../prompts/promptDocs'
 import promptTypeScript from '../prompts/promptTypeScript'
 import packageJsonTask, { PackageJsonEditor } from './packageJson'
 import never from 'never'
 
-const typedoc: Task<void, [boolean, PackageJsonEditor, boolean]> = {
-  dependencies: [promptTypedoc, packageJsonTask, promptTypeScript],
-  fn: (typedoc, packageJson, ts) => {
-    if (!typedoc) return
+const typedoc: Task<void, [Docs, PackageJsonEditor, boolean]> = {
+  dependencies: [promptDocs, packageJsonTask, promptTypeScript],
+  fn: (docs, packageJson, ts) => {
+    if (docs !== Docs.TYPEDOC) return
     const { data } = packageJson
     Object.assign(data.scripts ?? (data.scripts = {}), {
       'build:docs': `typedoc ${libDirPath}/${getMainFileName(ts)}`

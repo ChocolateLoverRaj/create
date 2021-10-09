@@ -23,6 +23,7 @@ const ghPagesActionVersion = 'v2'
 const ghWorkflows: Task<void, [Set<Workflow>]> = {
   dependencies: [shouldWriteGithubWorkflow],
   fn: async (workflows) => {
+    if (workflows.size === 0) return
     await ensureDir(workflowsDir)
     const setupSteps = [{
       name: 'Setup Repo',

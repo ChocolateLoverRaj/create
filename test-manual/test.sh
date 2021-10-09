@@ -14,5 +14,9 @@ tsconfigEsm.json \
 test \
 eslintTsconfig.json \
 .release-it.json \
-jest.config.js
+jest.config.js \
+docs \
+.storybook \
+babelConfigCjs.json \
+babelConfigEsm.json
 node ../dist/index

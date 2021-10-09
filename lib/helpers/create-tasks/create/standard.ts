@@ -1,7 +1,5 @@
-import never from 'never'
 import { CodeLint } from '../../codeLints'
 import { Task } from '../../dependency-queue'
-import getPackageFromVersion from '../../getPackageFromVersion'
 import standardPackage from '../../standardPackage'
 import promptCodeLint from '../prompts/promptCodeLint'
 import packageJsonTask, { PackageJsonEditor } from './packageJson'
@@ -11,27 +9,32 @@ import tsStandardPackage from '../../tsStandardPackage'
 import { Test } from '../../tests'
 import promptTests from '../prompts/promptTests'
 import { writeFile } from 'jsonfile'
+import promptReact from '../prompts/promptReact'
+import resolvePackageVersions from '../../../resolvePackageVersions'
 
 const eslintTsconfigPath = 'eslintTsconfig.json'
 
-const standard: Task<void, [CodeLint, PackageJsonEditor, boolean, Test]> = {
-  dependencies: [promptCodeLint, packageJsonTask, promptTypeScript, promptTests],
-  fn: async (codeLint, { data, beforeWrite }, ts, test) => {
+const standard: Task<void, [CodeLint, PackageJsonEditor, boolean, Test, boolean]> = {
+  dependencies: [promptCodeLint, packageJsonTask, promptTypeScript, promptTests, promptReact],
+  fn: async (codeLint, { data, beforeWrite }, ts, test, react) => {
     if (codeLint === 'standard') {
       beforeWrite.push((async () => {
         const standardPackageToUse = ts ? tsStandardPackage : standardPackage
-        const eslintStandardPackage =
-          await getPackageFromVersion(standardPackageToUse)
-        const eslintStandardPackageVersion =
-          eslintStandardPackage.version ?? never('no eslint-config-standard version')
-        Object.assign(data.devDependencies ?? (data.devDependencies = {}), {
-          ...eslintStandardPackage.peerDependencies,
-          [standardPackageToUse]: `^${eslintStandardPackageVersion}`
-        })
+        Object.assign(data.devDependencies ?? (data.devDependencies = {}),
+          await resolvePackageVersions({
+            [standardPackageToUse]: '*',
+            ...react ? { 'eslint-config-standard-jsx': '*' } : undefined
+          }, true))
       })(), writeFile(eslintConfigFile, {
         root: true,
-        extends: ts ? 'standard-with-typescript' : 'standard',
-        ignorePatterns: '/dist',
+        extends: [
+          ts ? 'standard-with-typescript' : 'standard',
+          react ? 'standard-jsx' : undefined
+        ],
+        ignorePatterns: [
+          '/dist',
+          test === 'jest' ? '**/__snapshots__' : undefined
+        ],
         parserOptions: ts
           ? {
               project: test === 'mocha' ? `./${eslintTsconfigPath}` : './tsconfig.json'

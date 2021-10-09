@@ -1,16 +1,17 @@
 {
   "cSpell.words": [
-    "Octokit",
-    "Paranjpe",
-    "Semver",
-    "Typedoc",
     "appgeist",
     "calipsa",
+    "ghaction",
+    "Jsons",
     "noreply",
+    "Octokit",
+    "Paranjpe",
     "pnpm",
     "pnpx",
     "programmerraj",
-    "ghaction"
+    "Semver",
+    "Typedoc"
   ],
   "typescript.format.semicolons": "remove",
   "typescript.tsdk": "node_modules\\typescript\\lib"

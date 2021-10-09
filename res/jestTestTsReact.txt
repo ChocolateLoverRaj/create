@@ -1,0 +1,7 @@
+import Component from '../{mainFileBaseName}'
+import { create } from 'react-test-renderer'
+
+test('renders', () => {
+  const component = create(<Component name='Bob' />)
+  expect(component.toJSON()).toMatchSnapshot()
+})

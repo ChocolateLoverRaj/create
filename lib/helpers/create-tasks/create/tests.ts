@@ -11,19 +11,25 @@ import promptTypeScript from '../prompts/promptTypeScript'
 import packageJsonTask, { PackageJsonEditor } from './packageJson'
 import testDir from './testDir'
 import { major, minor } from 'semver'
-import { copyFile } from 'fs/promises'
+import { copyFile, writeFile, readFile } from 'fs/promises'
 import { join } from 'path'
 import resPath from '../../resPath'
+import babelConfigPaths from '../../babelConfigPaths'
+import resolvePackageVersions from '../../../resolvePackageVersions'
+import pupa from 'pupa'
+import promptReact from '../prompts/promptReact'
+import writeBabelConfig from '../../writeBabelConfig'
 
-const testsTask: Task<void, [Test, PackageJsonEditor, boolean, Module, Set<Module>]> = {
+const testsTask: Task<void, [Test, PackageJsonEditor, boolean, Module, Set<Module>, boolean]> = {
   dependencies: [
     promptTests,
     packageJsonTask,
     promptTypeScript,
     promptSourceModule,
-    promptTargetModules
+    promptTargetModules,
+    promptReact
   ],
-  fn: async (test, { data, beforeWrite }, ts, sourceModule, targetModules) => {
+  fn: async (test, { data, beforeWrite }, ts, sourceModule, targetModules, react) => {
     if (test === 'none') return
     Object.assign(data.scripts ?? (data.scripts = {}), {
       test: test === 'mocha'
@@ -53,13 +59,26 @@ const testsTask: Task<void, [Test, PackageJsonEditor, boolean, Module, Set<Modul
       })
     })(), ts && test === 'jest' && (async () => {
       // Use ts-jest
-      await Promise.all([
+      await Promise.all<unknown>([
         (async () => {
-          Object.assign(data.devDependencies ?? (data.devDependencies = {}), {
-            'ts-jest': `^${await getLatestPackageVersion('ts-jest', '^27.0.3')}`
-          })
+          Object.assign(data.devDependencies ?? (data.devDependencies = {}),
+            await resolvePackageVersions({
+              'ts-jest': '^27.0.3',
+              ...react
+                ? {
+                    'react-test-renderer': '^17.0.2',
+                    '@types/react-test-renderer': '^17.0.1'
+                  }
+                : undefined
+            }))
         })(),
-        copyFile(join(resPath, 'jestTsConfig.js'), jestConfigPath)
+        react && writeFile(jestConfigPath, pupa(
+          await readFile(join(resPath, `jestTsReactConfig.${
+            targetModules.has('CommonJS') ? 'cjs' : 'mjs'}`), 'utf8'), {
+            babelConfigPath: targetModules.has('CommonJS') ? babelConfigPaths.CommonJS : '.babelrc'
+          })),
+        react && targetModules.size === 1 && targetModules.has('ESModules') &&
+          writeBabelConfig('CommonJS')
       ])
     })(), !ts && sourceModule === 'ESModules' && !targetModules.has('ESModules') && (async () => {
       // Use babel-jest

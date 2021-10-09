@@ -14,6 +14,8 @@ import mainFileBaseName from '../../mainFileBaseName'
 import testDir from './testDir'
 import pupa from 'pupa'
 import mainFileNameJs from '../../mainFileNameJs'
+import promptReact from '../prompts/promptReact'
+import promptDocs, { Docs } from '../prompts/promptDocs'
 
 const jsLibraryPaths: Record<Module, string> = {
   CommonJS: join(resPath, 'library.cjs'),
@@ -32,17 +34,31 @@ const privateProjectPath = join(resPath, 'private.js')
 const tsLibraryPath = join(resPath, 'library.ts')
 const mochaTsTestPath = join(resPath, 'mochaTestTs.txt')
 const jestTsTestPath = join(resPath, 'jestTestTs.txt')
+const jestTsReactTestPath = join(resPath, 'jestTestTsReact.txt')
+const tsReactLibraryPath = join(resPath, 'react.txt')
+const tsReactLibraryStoryPath = join(resPath, 'story.txt')
 
-const codeFiles: Task<void, [boolean, Module, boolean, Test]> = {
-  dependencies: [promptWillBePublished, promptSourceModule, promptTypeScript, promptTests],
-  fn: async (isLibrary, sourceModule, ts, test) => {
+const codeFiles: Task<void, [boolean, Module, boolean, Test, boolean, Docs]> = {
+  dependencies: [
+    promptWillBePublished,
+    promptSourceModule,
+    promptTypeScript,
+    promptTests,
+    promptReact,
+    promptDocs
+  ],
+  fn: async (isLibrary, sourceModule, ts, test, react, docs) => {
     await mkdir(libDirPath)
     await Promise.all<unknown>([
       copyFile(
         isLibrary
-          ? ts ? tsLibraryPath : jsLibraryPaths[sourceModule]
+          ? ts
+            ? react
+              ? tsReactLibraryPath
+              : tsLibraryPath
+            : jsLibraryPaths[sourceModule]
           : privateProjectPath,
-        join(libDirPath, getMainFileName(ts))
+        join(libDirPath, getMainFileName(ts, react))
       ),
       isLibrary && test === 'mocha' && (ts
         ? (async () => {
@@ -59,13 +75,18 @@ const codeFiles: Task<void, [boolean, Module, boolean, Test]> = {
       isLibrary && test === 'jest' && (async () => {
         const testDir = join(libDirPath, '__tests__')
         await mkdir(testDir)
-        const template = await readFile(ts ? jestTsTestPath : jestJsTestPaths[sourceModule], 'utf8')
+        const template = await readFile(ts
+          ? react ? jestTsReactTestPath : jestTsTestPath
+          : jestJsTestPaths[sourceModule], 'utf8')
         const testStr = pupa(template, {
           mainFileBaseName,
           mainFilePath: `../${mainFileNameJs}`
         })
-        await writeFile(join(testDir, `${mainFileBaseName}.test.${ts ? 'ts' : 'js'}`), testStr)
-      })()
+        await writeFile(join(testDir,
+          `${mainFileBaseName}.test.${ts ? `ts${react ? 'x' : ''}` : 'js'}`), testStr)
+      })(),
+      docs === Docs.STORYBOOK &&
+        copyFile(tsReactLibraryStoryPath, join(libDirPath, `${mainFileBaseName}.stories.tsx`))
     ])
   }
 }
