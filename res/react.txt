@@ -1,0 +1,18 @@
+import { FC } from 'react'
+
+export interface Props {
+  name: string
+  isChild?: boolean
+}
+
+const Component: FC<Props> = ({ name, isChild = false }) => (
+  <>
+    Name: {name}. <br />
+    <label>
+      Is child:
+      <input type='checkbox' checked={isChild} readOnly />
+    </label>
+  </>
+)
+
+export default Component

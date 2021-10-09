@@ -1,0 +1,16 @@
+import Component, { Props } from './index'
+import { Story } from '@storybook/react'
+
+export default {
+  title: 'Component',
+  component: Component
+}
+
+export const ComponentStory: Story<Props> = args => <Component {...args} />
+ComponentStory.args = {
+  name: 'Bob',
+  isChild: false
+}
+ComponentStory.argTypes = {
+  isChild: { table: { defaultValue: { summary: false } } }
+}

@@ -17,6 +17,8 @@ import ts from './ts'
 import testsTask from './tests'
 import typedoc from './typedoc'
 import releaseIt from './releaseIt'
+import storybook from './storybook'
+import react from './react'
 
 const createTasks = [
   packageJsonTask,
@@ -37,7 +39,9 @@ const createTasks = [
   ts,
   testsTask,
   typedoc,
-  releaseIt
+  storybook,
+  releaseIt,
+  react
 ]
 
 export default createTasks

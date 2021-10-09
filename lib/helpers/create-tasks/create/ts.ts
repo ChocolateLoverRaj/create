@@ -13,10 +13,11 @@ import tsModules from '../../tsModules'
 import tsconfigPaths from '../../tsconfigPaths'
 import promptTests from '../prompts/promptTests'
 import { Test } from '../../tests'
+import promptReact from '../prompts/promptReact'
 
-const ts: Task<void, [boolean, PackageJsonEditor, Set<Module>, Test]> = {
-  dependencies: [promptTypeScript, packageJsonTask, promptTargetModules, promptTests],
-  fn: async (ts, packageJson, targetModules, test) => {
+const ts: Task<void, [boolean, PackageJsonEditor, Set<Module>, Test, boolean]> = {
+  dependencies: [promptTypeScript, packageJsonTask, promptTargetModules, promptTests, promptReact],
+  fn: async (ts, packageJson, targetModules, test, react) => {
     if (!ts) return
     const { data } = packageJson
     data.types = `./${distDirPath}/${moduleDirs.ESModules}/index.d.ts`
@@ -40,37 +41,37 @@ const ts: Task<void, [boolean, PackageJsonEditor, Set<Module>, Test]> = {
       Object.assign(data.dependencies ?? (data.dependencies = {}), {
         tslib: `^${latestTsLibVersion}`
       })
-    })())
-    await Promise.all([
-      writeFile('tsconfig.json', {
-        include: test === 'none' ? [`./${libDirPath}`] : undefined,
-        compilerOptions: {
-          outDir: `./${distDirPath}`,
-          rootDir: test === 'none' ? `./${libDirPath}` : undefined,
-          esModuleInterop: false,
-          strictNullChecks: true,
-          importHelpers: true,
-          module: targetModules.size === 1
-            ? tsModules[targetModules.values().next().value]
-            : test === 'none' ? 'CommonJS' : undefined,
-          declaration: true,
-          moduleResolution: 'node'
-        }
-      }, { spaces: 2 }),
-      ...targetModules.size !== 1
-        ? [...targetModules].map(async targetModule => {
-            await writeFile(tsconfigPaths[targetModule], {
-              extends: './tsconfig.json',
-              compilerOptions: {
-                module: tsModules[targetModule],
-                outDir: `./${distDirPath}/${moduleDirs[targetModule]}`,
-                rootDir: `./${libDirPath}`
-              },
-              include: [`./${libDirPath}`]
-            }, { spaces: 2 })
-          })
-        : []
-    ])
+    })(),
+    writeFile('tsconfig.json', {
+      include: test === 'none' ? [`./${libDirPath}`] : undefined,
+      compilerOptions: {
+        outDir: `./${distDirPath}`,
+        rootDir: test === 'none' ? `./${libDirPath}` : undefined,
+        esModuleInterop: react,
+        strictNullChecks: true,
+        importHelpers: true,
+        module: targetModules.size === 1
+          ? tsModules[targetModules.values().next().value]
+          : test === 'none' ? 'CommonJS' : undefined,
+        declaration: true,
+        moduleResolution: 'node',
+        jsx: react ? 'preserve' : undefined
+      }
+    }, { spaces: 2 }),
+    // If commonjs is also specified
+    ...targetModules.size !== 1
+      ? [...targetModules].map(async targetModule => {
+          await writeFile(tsconfigPaths[targetModule], {
+            extends: './tsconfig.json',
+            compilerOptions: {
+              module: tsModules[targetModule],
+              outDir: `./${distDirPath}/${moduleDirs[targetModule]}`,
+              rootDir: `./${libDirPath}`
+            },
+            include: [`./${libDirPath}`]
+          }, { spaces: 2 })
+        })
+      : [])
   }
 }
 

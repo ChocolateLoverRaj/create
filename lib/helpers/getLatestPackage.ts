@@ -12,7 +12,8 @@ const getLatestPackage = async (
 ): Promise<Package | undefined> => {
   const packageVersions = await getPackage(packageName) ?? never('Package doesn\'t exist')
   const versions = Object.keys(packageVersions.versions)
-  const latestVersion = maxSatisfying(versions, range) ?? never('No satisfying versions')
+  const latestVersion = maxSatisfying(versions, range) ??
+    never(`No satisfying versions for package ${packageName}`)
   return packageVersions.versions[latestVersion]
 }
 
