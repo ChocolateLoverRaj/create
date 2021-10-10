@@ -148,7 +148,7 @@ const ghWorkflows: Task<void, [Set<Workflow>]> = {
                 name: 'Setup GitHub Author',
                 run: [
                   `git config --global user.email "${ghActionsBotEmail}"`,
-                  'git config --global user.name "github-actions[bot]'
+                  'git config --global user.name "github-actions[bot]"'
                 ].join('\n')
               }, {
                 if: ifIncrement,
