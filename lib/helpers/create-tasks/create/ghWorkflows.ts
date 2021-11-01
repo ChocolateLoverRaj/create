@@ -153,8 +153,12 @@ const ghWorkflows: Task<void, [Set<Workflow>]> = {
               }, {
                 if: ifIncrement,
                 name: 'Semantic Release',
-                // eslint-disable-next-line no-template-curly-in-string
-                run: 'pnpx release-it ${{ steps.get_increment.outputs.increment }} --ci',
+                run: [
+                  // eslint-disable-next-line no-template-curly-in-string
+                  'echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" > .npmrc',
+                  // eslint-disable-next-line no-template-curly-in-string
+                  'pnpx release-it ${{ steps.get_increment.outputs.increment }} --ci'
+                ].join('\n'),
                 env: {
                   ...githubTokenEnv,
                   // eslint-disable-next-line no-template-curly-in-string
