@@ -1,3 +1,0 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
-
-exports[`detects MIT license prints text: Detected License Text 1`] = `"Detected license: MIT"`;

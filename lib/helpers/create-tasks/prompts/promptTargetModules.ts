@@ -1,24 +1,16 @@
-import prompts from 'prompts'
-import abortOnKill from '../../abortOnKill'
 import { Task } from '../../dependency-queue'
 import modules, { Module } from '../../modules'
+import promptSelectMulti from '../../promptSelectMulti'
 
 const defaultModules = new Set<Module>()
   .add('CommonJS')
   .add('ESModules')
 
-const promptTargetModules: Task<Promise<Set<Module>>, []> = async () => new Set((await prompts({
-  name: 'main',
-  message: 'What modules will be published?',
-  // cspell:disable-next
-  type: 'multiselect',
-  choices: modules.map(module => ({
+const promptTargetModules: Task<Promise<Set<Module>>, []> = async () =>
+  new Set(await promptSelectMulti('What modules will be published?', modules.map(module => ({
     title: module,
     value: module,
     selected: defaultModules.has(module)
-  })),
-  min: 1,
-  onState: abortOnKill
-})).main)
+  })), 1))
 
 export default promptTargetModules
