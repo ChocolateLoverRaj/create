@@ -44,6 +44,7 @@
     "lint": "eslint .",
     "test": "jest",
     "test:ci": "jest --ci",
+    "test:types": "tsc --project publishTsconfig.json --noEmit",
     "start": "node dist/lib/index",
     "build": "tsc --project publishTsconfig.json",
     "prepublishOnly": "npm run build"
