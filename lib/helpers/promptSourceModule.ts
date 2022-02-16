@@ -16,9 +16,8 @@ const promptSourceModule = async (targetModules: Set<Module>): Promise<Module> =
           source files will also be compiled to CommonJS for `require`ing'
         : 'Source files will be compiled to CommonJS'
       : 'No transformation necessary.'
-  }], {
-    initial: esmTarget ? 1 : 0
-  })
+  }],
+  esmTarget ? 1 : 0)
 }
 
 export default promptSourceModule
