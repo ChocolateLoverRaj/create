@@ -18,6 +18,7 @@ test-manual/babelConfigCjs.json
 test-manual/babelConfigEsm.json
 test-tmp
 package-lock.json
+pnpm-lock.yaml
 
 # Logs
 logs
