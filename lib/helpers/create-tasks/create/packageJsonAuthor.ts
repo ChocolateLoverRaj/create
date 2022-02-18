@@ -14,8 +14,8 @@ const packageJsonAuthor: Task<void, [FindGitResult, PackageJsonEditor]> = {
       const octokit = new Octokit()
       const { data: { name, email } } = await octokit.users.getByUsername({ username })
       packageJson.data.author = {
-        name: name ?? username,
-        email: email ?? undefined,
+        name: (name as string | null) ?? username,
+        email: (email as string | null) ?? undefined,
         url: getGithubUserUrl(username)
       }
     }, git?.remoteUrl))

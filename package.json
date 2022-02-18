@@ -52,7 +52,7 @@
   "dependencies": {
     "@appgeist/ensure-dir": "^1.1.4",
     "@calipsa/wrap-error": "^0.1.6",
-    "@octokit/rest": "^18.5.3",
+    "@octokit/rest": "^18.12.0",
     "axios": "^0.21.1",
     "commander": "^7.2.0",
     "find-config": "^1.0.0",
