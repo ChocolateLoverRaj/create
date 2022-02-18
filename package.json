@@ -52,11 +52,12 @@
   "dependencies": {
     "@appgeist/ensure-dir": "^1.1.4",
     "@calipsa/wrap-error": "^0.1.6",
-    "@octokit/rest": "^18.5.3",
+    "@octokit/rest": "^18.12.0",
     "axios": "^0.21.1",
     "commander": "^7.2.0",
     "find-config": "^1.0.0",
     "find-git-root": "^1.0.4",
+    "fs": "0.0.1-security",
     "jsonfile": "^6.1.0",
     "never": "^1.0.3",
     "normalize-path": "^3.0.0",
