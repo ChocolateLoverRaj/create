@@ -11,6 +11,7 @@ import promptTests from '../prompts/promptTests'
 import { writeFile } from 'jsonfile'
 import promptReact from '../prompts/promptReact'
 import resolvePackageVersions from '../../../resolvePackageVersions'
+import { join } from 'path'
 
 const eslintTsconfigPath = 'eslintTsconfig.json'
 
@@ -25,7 +26,7 @@ const standard: Task<void, [CodeLint, PackageJsonEditor, boolean, Test, boolean]
             [standardPackageToUse]: '*',
             ...react ? { 'eslint-config-standard-jsx': '*' } : undefined
           }, true))
-      })(), writeFile(eslintConfigFile, {
+      })(), writeFile(join(process.cwd(), eslintConfigFile), {
         root: true,
         extends: [
           ts ? 'standard-with-typescript' : 'standard',
@@ -40,10 +41,11 @@ const standard: Task<void, [CodeLint, PackageJsonEditor, boolean, Test, boolean]
               project: test === 'mocha' ? `./${eslintTsconfigPath}` : './tsconfig.json'
             }
           : undefined
-      }, { spaces: 2 }), ts && test === 'mocha' && writeFile(eslintTsconfigPath, {
-        extends: './tsconfig.json',
-        include: ['**/*.ts']
-      }, { spaces: 2 }))
+      }, { spaces: 2 }), ts && test === 'mocha' && writeFile(
+        join(process.cwd(), eslintTsconfigPath), {
+          extends: './tsconfig.json',
+          include: ['**/*.ts']
+        }, { spaces: 2 }))
     }
   }
 }
